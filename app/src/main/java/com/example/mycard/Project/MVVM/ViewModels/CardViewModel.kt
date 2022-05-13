@@ -1,7 +1,10 @@
 package com.example.mycard.Project.MVVM.ViewModels
 
 import android.app.Application
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.mycard.Project.MVVM.Models.CardModel
 import com.example.mycard.Project.Room.Data.DataBase.DataBase
@@ -36,4 +39,15 @@ class CardViewModel(application: Application) : AndroidViewModel(application) {
     fun deleteAllProducts(){
         cardRepository.deleteAllProducts()
     }
+
+    class CardViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            @Suppress("UNCHECKED_CAST")
+            if (modelClass.isAssignableFrom(CardViewModel::class.java)) {
+                return CardViewModel(application) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
+    }
 }
+

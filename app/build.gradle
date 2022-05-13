@@ -6,6 +6,11 @@ plugins {
 
 android {
     compileSdk 31
+    kotlinOptions {
+        freeCompilerArgs += [
+                "-Xjvm-default=all",
+        ]
+    }
 
     defaultConfig {
         applicationId "com.example.mycard"
