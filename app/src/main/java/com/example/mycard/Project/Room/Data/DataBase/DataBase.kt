@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.mycard.Project.MVVM.Models.CardModel
 import com.example.mycard.Project.Room.Data.DAO.CardDAO
 
-@Database(entities = [CardModel::class], exportSchema = false, version = 1)
+@Database(entities = [CardModel::class], exportSchema = false, version = 2)
 abstract class DataBase : RoomDatabase() {
     abstract fun cardDao() : CardDAO
 
@@ -22,7 +22,7 @@ abstract class DataBase : RoomDatabase() {
                 return tempInstance
             }
             synchronized(this){
-                val instance = Room.databaseBuilder(context, DataBase::class.java, "JKXDataBase")
+                val instance = Room.databaseBuilder(context, DataBase::class.java, "MyCardDataBase")
                     .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
