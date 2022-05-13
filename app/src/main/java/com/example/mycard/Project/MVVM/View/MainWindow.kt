@@ -1,5 +1,6 @@
 package com.example.mycard.Project.MVVM.View
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,13 +22,15 @@ import com.example.mycard.Project.MVVM.Models.CardModel
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
 import com.example.mycard.Project.Room.Repository.CardRepository
 
+@SuppressLint("UnrememberedMutableState")
+
 @ExperimentalMaterialApi
 @Composable
 fun MainWindow(cardViewModel: CardViewModel){
-
     val getAllProductsVM = cardViewModel.getAllProducts.collectAsState(initial = listOf()).value
+    val showDialog = mutableStateOf(false)
 
-    Scaffold(topBar = {TopAppBarCard(cardViewModel = cardViewModel)}) {
+    Scaffold(topBar = {TopAppBarCard(cardViewModel = cardViewModel, showDialog = showDialog)}) {
         Box() {
             CustomLazyColumnItem(list = getAllProductsVM)
         }
@@ -35,16 +38,19 @@ fun MainWindow(cardViewModel: CardViewModel){
 }
 
 @Composable
-fun TopAppBarCard(cardViewModel: CardViewModel){
-
+fun TopAppBarCard(cardViewModel: CardViewModel, showDialog : MutableState<Boolean>){
     TopAppBar(modifier = Modifier.fillMaxWidth()) {
-        Text(text = "Продукты", fontWeight = FontWeight.Bold, fontStyle = MaterialTheme.typography.h1.fontStyle)
+        Text(text = "Продукты", fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.h5.fontSize)
         Spacer(Modifier.weight(1f, true))
         Button(onClick = {
-            AddNewProduct(cardViewModel = cardViewModel)
+            showDialog.value = true
         }) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = "AddProduct")
+            Icon(imageVector = Icons.Default.Add, contentDescription = "AddProduct", modifier = Modifier.size(26.dp))
         }
+        if(showDialog.value) {
+            AddNewProduct(cardViewModel = cardViewModel, showDialog = showDialog)
+        }
+
     }
 
 
@@ -54,39 +60,72 @@ fun TopAppBarCard(cardViewModel: CardViewModel){
 @ExperimentalMaterialApi
 @Composable
 fun CustomLazyColumnItem(list : List<CardModel>) {
-    LazyColumn() {
+    LazyColumn(contentPadding = PaddingValues(vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         items(list) { product ->
             ListItem(
-                text = { Text(text = product.productName) },
-                trailing = { Text(text = product.productAmount) }
+                modifier = Modifier.background(Color.LightGray),
+                text = { Text(text = product.productName, fontSize = MaterialTheme.typography.h6.fontSize) },
+                trailing = { Text(text = "Количество: " + product.productAmount, fontSize = MaterialTheme.typography.h6.fontSize) }
 
             )
         }
     }
 }
 
+@Composable
+fun AddNewProduct(cardViewModel: CardViewModel, showDialog : MutableState<Boolean>){
 
+    val openDialog = remember { mutableStateOf(true) }
+    var name : String by remember { mutableStateOf("") }
+    var amount : String by remember { mutableStateOf("") }
 
-fun AddNewProduct(cardViewModel: CardViewModel){
-    val test = CardModel(1, "Banana", "10")
-    cardViewModel.addProduct(test)
-
-    /*
-
-    AlertDialog(
-        onDismissRequest = { },
-        title = {
-            Text(text = "Добавить предмет")
-        },
-        confirmButton = {
-            Button(onClick = {
-                cardViewModel.addProduct(test)
-            }){
-                Text(text = "Подтвердить")
+    if (openDialog.value) {
+        AlertDialog(
+            onDismissRequest = {
+                openDialog.value = false
+            },
+            title = {
+                Text(text = "Добавить продукт")
+            },
+            text = {
+                Column() {
+                    TextField(
+                        value = name,
+                        onValueChange = { name = it }
+                    )
+                    TextField(
+                        value = amount,
+                        onValueChange = { amount = it }
+                    )
+                }
+            },
+            buttons = {
+                Row(
+                    modifier = Modifier.padding(all = 8.dp),
+                ) {
+                    Button(
+                        onClick = {
+                            val product = CardModel(0, name, amount)
+                            cardViewModel.addProduct(product)
+                            openDialog.value = false
+                            showDialog.value = false
+                        }
+                    ) {
+                        Text("Добавить")
+                    }
+                    Spacer(modifier = Modifier.weight(1f, true))
+                    Button(
+                        onClick = {
+                            openDialog.value = false
+                            showDialog.value = false
+                        }
+                    ) {
+                        Text("Отмена")
+                    }
+                }
             }
-        }
-    )
-     */
+        )
+    }
 }
 
 
