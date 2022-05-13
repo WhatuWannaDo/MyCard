@@ -8,6 +8,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.mycard.Project.MVVM.View.MainWindow
 import com.example.mycard.ui.theme.MyCardTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,7 +18,7 @@ class MainActivity : ComponentActivity() {
             MyCardTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
+                    MainWindow()
                 }
             }
         }
@@ -25,15 +26,3 @@ class MainActivity : ComponentActivity() {
 }
 //dict.1.1.20220513T141149Z.c25bbf6feb708385.c293ce128f4bb0140d1f6952536927b054117372
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    MyCardTheme {
-        Greeting("Android")
-    }
-}
