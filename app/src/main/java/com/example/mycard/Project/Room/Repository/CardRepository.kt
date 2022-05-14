@@ -15,7 +15,7 @@ class CardRepository(private val cardDAO: CardDAO) {
         cardDAO.deleteProduct(cardModel = cardModel)
     }
 
-    fun deleteAllProducts(){
+    suspend fun deleteAllProducts(){
         cardDAO.deleteAllProducts()
     }
 }

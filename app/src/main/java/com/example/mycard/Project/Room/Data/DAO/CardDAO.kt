@@ -14,12 +14,12 @@ interface CardDAO {
     fun getAllProducts() : Flow<List<CardModel>>
 
     @Insert
-    fun addProduct(cardModel: CardModel)
+    suspend fun addProduct(cardModel: CardModel)
 
     @Delete
-    fun deleteProduct(cardModel: CardModel)
+    suspend fun deleteProduct(cardModel: CardModel)
 
     @Query("DELETE FROM card_products")
-    fun deleteAllProducts()
+    suspend fun deleteAllProducts()
 
 }

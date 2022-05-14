@@ -36,8 +36,10 @@ class CardViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun deleteAllProducts(){
-        cardRepository.deleteAllProducts()
+    suspend fun deleteAllProducts(){
+        viewModelScope.launch(Dispatchers.IO) {
+            cardRepository.deleteAllProducts()
+        }
     }
 
     class CardViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
