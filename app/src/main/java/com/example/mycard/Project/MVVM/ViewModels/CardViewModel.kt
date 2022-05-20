@@ -1,22 +1,23 @@
 package com.example.mycard.Project.MVVM.ViewModels
 
 import android.app.Application
-import androidx.cardview.widget.CardView
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.mycard.Project.MVVM.Models.CardModel
+import com.example.mycard.Project.MVVM.Models.DictModel
+import com.example.mycard.Project.MVVM.Models.HeadModel
 import com.example.mycard.Project.Room.Data.DataBase.DataBase
 import com.example.mycard.Project.Room.Repository.CardRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Response
 
 class CardViewModel(application: Application) : AndroidViewModel(application) {
 
     val getAllProducts : Flow<List<CardModel>>
     private val cardRepository : CardRepository
+    var myResponse: MutableLiveData<Response<HeadModel>> = MutableLiveData()
 
     init {
         val cardDAO = DataBase.getDatabase(application).cardDao()
@@ -39,6 +40,13 @@ class CardViewModel(application: Application) : AndroidViewModel(application) {
     suspend fun deleteAllProducts(){
         viewModelScope.launch(Dispatchers.IO) {
             cardRepository.deleteAllProducts()
+        }
+    }
+
+    fun getTextApi(apiKey : String, lang : String, text:String) {
+        viewModelScope.launch{
+            val response = cardRepository.getTextFromApi(apiKey, lang, text)
+            myResponse.value = response
         }
     }
 

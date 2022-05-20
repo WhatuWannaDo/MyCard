@@ -1,6 +1,7 @@
 package com.example.mycard
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.ExperimentalMaterialApi
@@ -9,12 +10,18 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.mycard.Project.MVVM.View.MainWindow
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
 import com.example.mycard.ui.theme.MyCardTheme
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    @DelicateCoroutinesApi
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,10 +31,22 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     MainWindow(viewModel)
+
+                    viewModel.getTextApi("dict.1.1.20220513T141149Z.c25bbf6feb708385.c293ce128f4bb0140d1f6952536927b054117372", "en-en", "banana")
+                    viewModel.myResponse.observe(this, Observer { response ->
+                        if(response.isSuccessful) {
+                            response.body()?.def?.get(0)?.tr?.forEach { TR ->
+                                TR.syn?.forEach { SYN ->
+                                    Log.e("Response",SYN.text)
+                                }
+                            }
+                        }else{
+                            Log.e("Response", "CANNOT_LOAD_DATA")
+                        }
+                    })
                 }
             }
         }
     }
 }
-//dict.1.1.20220513T141149Z.c25bbf6feb708385.c293ce128f4bb0140d1f6952536927b054117372
 
