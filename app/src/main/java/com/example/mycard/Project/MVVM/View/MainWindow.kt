@@ -50,19 +50,21 @@ fun MainWindow(cardViewModel: CardViewModel, obj : MainActivity){
     val getAllProductsVM = cardViewModel.getAllProducts.collectAsState(initial = listOf()).value
     val showDialog = mutableStateOf(false)
     val deleteDialog = mutableStateOf(false)
+    val openDialogAddNewProduct = remember { mutableStateOf(false) }
 
-    Scaffold(topBar = {TopAppBarCard(cardViewModel = cardViewModel, showDialog = showDialog, deleteDialog = deleteDialog, obj = obj)}) {
+    Scaffold(topBar = {TopAppBarCard(cardViewModel = cardViewModel, showDialog = showDialog, deleteDialog = deleteDialog, obj = obj, productList = getAllProductsVM, openDialogAddNewProduct = openDialogAddNewProduct)}) {
         CustomLazyColumnItem(list = getAllProductsVM)
     }
 }
 
 @DelicateCoroutinesApi
 @Composable
-fun TopAppBarCard(cardViewModel: CardViewModel, showDialog : MutableState<Boolean>, deleteDialog: MutableState<Boolean>, obj: MainActivity){
+fun TopAppBarCard(cardViewModel: CardViewModel, showDialog : MutableState<Boolean>, deleteDialog: MutableState<Boolean>, obj: MainActivity, productList : List<CardModel>, openDialogAddNewProduct : MutableState<Boolean>){
     TopAppBar(modifier = Modifier.fillMaxWidth()) {
         Text(text = "Products", fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.h5.fontSize)
         Spacer(Modifier.weight(1f, true))
         Button(onClick = {
+            openDialogAddNewProduct.value = true
             showDialog.value = true
         }) {
             Icon(imageVector = Icons.Default.Add, contentDescription = "AddProduct", modifier = Modifier.size(26.dp))
@@ -73,10 +75,12 @@ fun TopAppBarCard(cardViewModel: CardViewModel, showDialog : MutableState<Boolea
             Icon(imageVector = Icons.Default.Delete, contentDescription = "DeleteAll", modifier = Modifier.size(26.dp))
         }
         if(showDialog.value) {
-            AddNewProduct(cardViewModel = cardViewModel, showDialog = showDialog, obj = obj)
+            AddNewProduct(cardViewModel = cardViewModel, showDialog = showDialog, obj = obj, openDialogAddNewProduct = openDialogAddNewProduct)
         }
         if(deleteDialog.value) {
-            DeleteAllDialog(deleteDialog = deleteDialog, cardViewModel = cardViewModel)
+            if(productList.isNotEmpty()){
+                DeleteAllDialog(deleteDialog = deleteDialog, cardViewModel = cardViewModel)
+            }
         }
 
     }
@@ -139,9 +143,8 @@ fun DeleteAllDialog(deleteDialog : MutableState<Boolean>, cardViewModel: CardVie
 
 
 @Composable
-fun AddNewProduct(cardViewModel: CardViewModel, showDialog : MutableState<Boolean>, obj: MainActivity){
+fun AddNewProduct(cardViewModel: CardViewModel, showDialog : MutableState<Boolean>, obj: MainActivity, openDialogAddNewProduct : MutableState<Boolean>){
 
-    val openDialog = remember { mutableStateOf(true) }
     var name : String by remember { mutableStateOf("") }
     var amount : String by remember { mutableStateOf("") }
     var expanded : Boolean by remember { mutableStateOf(false)}
@@ -171,10 +174,10 @@ fun AddNewProduct(cardViewModel: CardViewModel, showDialog : MutableState<Boolea
             }
         }
     })
-    if (openDialog.value) {
+    if (openDialogAddNewProduct.value) {
         AlertDialog(
             onDismissRequest = {
-                openDialog.value = false
+                openDialogAddNewProduct.value = false
             },
             title = {
                 Text(text = "Add product")
@@ -232,7 +235,7 @@ fun AddNewProduct(cardViewModel: CardViewModel, showDialog : MutableState<Boolea
                             val product = CardModel(0, name, amount)
                             if (name.isNotEmpty() && amount.isNotEmpty()){
                                 cardViewModel.addProduct(product)
-                                openDialog.value = false
+                                openDialogAddNewProduct.value = false
                                 showDialog.value = false
                             }else{
                                 Toast.makeText(obj, "Fields text is incorrect!", Toast.LENGTH_SHORT).show()
@@ -244,7 +247,7 @@ fun AddNewProduct(cardViewModel: CardViewModel, showDialog : MutableState<Boolea
                     Spacer(modifier = Modifier.weight(1f, true))
                     Button(
                         onClick = {
-                            openDialog.value = false
+                            openDialogAddNewProduct.value = false
                             showDialog.value = false
                         }
                     ) {

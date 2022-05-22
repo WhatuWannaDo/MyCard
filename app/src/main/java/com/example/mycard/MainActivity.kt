@@ -38,5 +38,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-//7e843a8220f14d5ba2891e686e661e9a
-//https://api.spoonacular.com/food/ingredients/autocomplete?apiKey=7e843a8220f14d5ba2891e686e661e9a&query=appl&number=5
