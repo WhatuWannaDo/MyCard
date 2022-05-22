@@ -1,7 +1,6 @@
 package com.example.mycard.Project.Room.Repository
 
 import com.example.mycard.Project.MVVM.Models.CardModel
-import com.example.mycard.Project.MVVM.Models.DictModel
 import com.example.mycard.Project.MVVM.Models.HeadModel
 import com.example.mycard.Project.Network.DictApiObject
 import com.example.mycard.Project.Room.Data.DAO.CardDAO
@@ -22,8 +21,8 @@ class CardRepository(private val cardDAO: CardDAO) {
     suspend fun deleteAllProducts(){
         cardDAO.deleteAllProducts()
     }
-    suspend fun getTextFromApi(apiKey : String, lang : String, text:String) : Response<HeadModel> {
-        return DictApiObject.api.getTextFromDictApi(apiKey, lang, text)
+    suspend fun getTextFromApi(apiKey : String, text : String, value:String) : Response<List<HeadModel>> {
+        return DictApiObject.api.getTextFromDictApi(apiKey, text, value)
     }
 
 }

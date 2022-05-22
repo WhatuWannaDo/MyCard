@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object DictApiObject {
     private val retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl("https://dictionary.yandex.net/api/v1/dicservice.json/")
+            .baseUrl("https://api.spoonacular.com/food/ingredients/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

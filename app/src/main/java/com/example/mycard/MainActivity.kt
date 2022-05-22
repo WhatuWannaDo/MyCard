@@ -30,23 +30,13 @@ class MainActivity : ComponentActivity() {
             MyCardTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    MainWindow(viewModel)
+                    MainWindow(viewModel, this)
 
-                    viewModel.getTextApi("dict.1.1.20220513T141149Z.c25bbf6feb708385.c293ce128f4bb0140d1f6952536927b054117372", "en-en", "banana")
-                    viewModel.myResponse.observe(this, Observer { response ->
-                        if(response.isSuccessful) {
-                            response.body()?.def?.get(0)?.tr?.forEach { TR ->
-                                TR.syn?.forEach { SYN ->
-                                    Log.e("Response",SYN.text)
-                                }
-                            }
-                        }else{
-                            Log.e("Response", "CANNOT_LOAD_DATA")
-                        }
-                    })
                 }
             }
         }
     }
 }
 
+//7e843a8220f14d5ba2891e686e661e9a
+//https://api.spoonacular.com/food/ingredients/autocomplete?apiKey=7e843a8220f14d5ba2891e686e661e9a&query=appl&number=5
