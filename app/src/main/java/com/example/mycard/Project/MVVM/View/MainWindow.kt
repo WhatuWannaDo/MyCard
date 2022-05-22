@@ -51,15 +51,33 @@ fun MainWindow(cardViewModel: CardViewModel, obj : MainActivity){
     val showDialog = mutableStateOf(false)
     val deleteDialog = mutableStateOf(false)
     val openDialogAddNewProduct = remember { mutableStateOf(false) }
+    val api = "7e843a8220f14d5ba2891e686e661e9a"
 
-    Scaffold(topBar = {TopAppBarCard(cardViewModel = cardViewModel, showDialog = showDialog, deleteDialog = deleteDialog, obj = obj, productList = getAllProductsVM, openDialogAddNewProduct = openDialogAddNewProduct)}) {
+    Scaffold(topBar = {
+        TopAppBarCard(cardViewModel = cardViewModel,
+            showDialog = showDialog,
+            deleteDialog = deleteDialog,
+            obj = obj,
+            productList = getAllProductsVM,
+            openDialogAddNewProduct = openDialogAddNewProduct,
+            api = api)}
+    ){
         CustomLazyColumnItem(list = getAllProductsVM)
     }
 }
 
 @DelicateCoroutinesApi
 @Composable
-fun TopAppBarCard(cardViewModel: CardViewModel, showDialog : MutableState<Boolean>, deleteDialog: MutableState<Boolean>, obj: MainActivity, productList : List<CardModel>, openDialogAddNewProduct : MutableState<Boolean>){
+fun TopAppBarCard(
+    cardViewModel: CardViewModel,
+    showDialog : MutableState<Boolean>,
+    deleteDialog: MutableState<Boolean>,
+    obj: MainActivity,
+    productList : List<CardModel>,
+    openDialogAddNewProduct : MutableState<Boolean>,
+    api : String
+){
+
     TopAppBar(modifier = Modifier.fillMaxWidth()) {
         Text(text = "Products", fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.h5.fontSize)
         Spacer(Modifier.weight(1f, true))
@@ -75,7 +93,7 @@ fun TopAppBarCard(cardViewModel: CardViewModel, showDialog : MutableState<Boolea
             Icon(imageVector = Icons.Default.Delete, contentDescription = "DeleteAll", modifier = Modifier.size(26.dp))
         }
         if(showDialog.value) {
-            AddNewProduct(cardViewModel = cardViewModel, showDialog = showDialog, obj = obj, openDialogAddNewProduct = openDialogAddNewProduct)
+            AddNewProduct(cardViewModel = cardViewModel, showDialog = showDialog, obj = obj, openDialogAddNewProduct = openDialogAddNewProduct, api = api)
         }
         if(deleteDialog.value) {
             if(productList.isNotEmpty()){
@@ -103,7 +121,10 @@ fun CustomLazyColumnItem(list : List<CardModel>) {
 }
 @DelicateCoroutinesApi
 @Composable
-fun DeleteAllDialog(deleteDialog : MutableState<Boolean>, cardViewModel: CardViewModel){
+fun DeleteAllDialog(
+    deleteDialog : MutableState<Boolean>,
+    cardViewModel: CardViewModel
+){
     val openDialog = remember { mutableStateOf(true) }
 
     AlertDialog(
@@ -143,13 +164,18 @@ fun DeleteAllDialog(deleteDialog : MutableState<Boolean>, cardViewModel: CardVie
 
 
 @Composable
-fun AddNewProduct(cardViewModel: CardViewModel, showDialog : MutableState<Boolean>, obj: MainActivity, openDialogAddNewProduct : MutableState<Boolean>){
+fun AddNewProduct(
+    cardViewModel: CardViewModel,
+    showDialog : MutableState<Boolean>,
+    obj: MainActivity,
+    openDialogAddNewProduct : MutableState<Boolean>,
+    api: String
+){
 
     var name : String by remember { mutableStateOf("") }
     var amount : String by remember { mutableStateOf("") }
     var expanded : Boolean by remember { mutableStateOf(false)}
     var dropDownMenuItems = listOf<String>()
-    val api = "7e843a8220f14d5ba2891e686e661e9a"
 
     cardViewModel.getTextApi(api, name, "5")
 
