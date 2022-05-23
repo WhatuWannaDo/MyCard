@@ -93,7 +93,7 @@ fun TopAppBarCard(
     navController: NavController
 ){
     TopAppBar(modifier = Modifier.fillMaxWidth()) {
-        Text(text = "Products", fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.h5.fontSize)
+        Text(text = "Ingredients", fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.h5.fontSize)
         Spacer(Modifier.weight(1f, true))
         Button(onClick = {
             openDialogAddNewProduct.value = true
@@ -117,6 +117,8 @@ fun TopAppBarCard(
         if(deleteDialog.value) {
             if(productList.isNotEmpty()){
                 DeleteAllDialog(deleteDialog = deleteDialog, cardViewModel = cardViewModel)
+            }else{
+                Toast.makeText(obj, "No data here", Toast.LENGTH_SHORT).show()
             }
         }
 
