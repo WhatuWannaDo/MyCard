@@ -22,7 +22,7 @@ fun SetupNavGraph(navHostController: NavHostController, cardViewModel: CardViewM
             MainWindow(cardViewModel = cardViewModel, obj = obj, navHostController)
         })
         composable(route = Screens.Settings.route, content = {
-            SettingsTab()
+            SettingsTab(navHostController)
         })
     }
 }

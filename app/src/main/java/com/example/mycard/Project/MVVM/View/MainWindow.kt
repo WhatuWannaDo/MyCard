@@ -1,6 +1,8 @@
 package com.example.mycard.Project.MVVM.View
 
 import android.annotation.SuppressLint
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
@@ -59,6 +61,8 @@ fun MainWindow(cardViewModel: CardViewModel, obj : MainActivity, navController: 
     val alertDialogDescription = remember { mutableStateOf(false) }
     val api = "7e843a8220f14d5ba2891e686e661e9a"
 
+    val sharedPrefs : SharedPreferences = obj.getSharedPreferences("descr", MODE_PRIVATE)
+
     Scaffold(topBar = {
         TopAppBarCard(cardViewModel = cardViewModel,
             showDialog = showDialog,
@@ -68,9 +72,9 @@ fun MainWindow(cardViewModel: CardViewModel, obj : MainActivity, navController: 
             openDialogAddNewProduct = openDialogAddNewProduct,
             api = api,
             navController = navController)
-        AlertDialogDescription(alertDialogDescription = alertDialogDescription)}
+        AlertDialogDescription(alertDialogDescription = alertDialogDescription, sharedPreferences = sharedPrefs)}
     ){
-        CustomLazyColumnItem(list = getAllProductsVM, alertDialogDescription = alertDialogDescription)
+        CustomLazyColumnItem(list = getAllProductsVM, alertDialogDescription = alertDialogDescription, sharedPreferences = sharedPrefs)
     }
 }
 
@@ -118,9 +122,11 @@ fun TopAppBarCard(
 
 }
 
+@SuppressLint("CommitPrefEdits")
 @ExperimentalMaterialApi
 @Composable
-fun CustomLazyColumnItem(list : List<CardModel>, alertDialogDescription : MutableState<Boolean>) {
+fun CustomLazyColumnItem(list : List<CardModel>, alertDialogDescription : MutableState<Boolean>, sharedPreferences: SharedPreferences) {
+    val editor = sharedPreferences.edit()
     LazyColumn(contentPadding = PaddingValues(vertical = 10.dp, horizontal = 5.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         items(list) { product ->
             ListItem(
@@ -128,6 +134,9 @@ fun CustomLazyColumnItem(list : List<CardModel>, alertDialogDescription : Mutabl
                     .border(2.dp, color = Color.Green, shape = RoundedCornerShape(15.dp))
                     .clickable {
                         alertDialogDescription.value = true
+                        editor
+                            .putString("descriptionItem", product.description.toString())
+                            .apply()
                     },
                 text = { Text(text = product.productName, fontSize = MaterialTheme.typography.h6.fontSize) },
                 trailing = { Text(text = "Amount: " + product.productAmount, fontSize = MaterialTheme.typography.h6.fontSize) }
@@ -136,17 +145,20 @@ fun CustomLazyColumnItem(list : List<CardModel>, alertDialogDescription : Mutabl
     }
 
 }
+@SuppressLint("CommitPrefEdits")
 @ExperimentalMaterialApi
 @Composable
-fun AlertDialogDescription(alertDialogDescription: MutableState<Boolean>){
+fun AlertDialogDescription(alertDialogDescription: MutableState<Boolean>, sharedPreferences: SharedPreferences){
     if(alertDialogDescription.value){
         AlertDialog(
             onDismissRequest = { alertDialogDescription.value = false },
-            title = { Text(text = "Description")},
+            title = { Text(text = "Description", fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.h5.fontSize)},
             buttons = {
-                Row(
+                Column(
                     modifier = Modifier.padding(vertical = 20.dp, horizontal = 4.dp),
                 ) {
+                    Text(text = sharedPreferences.getString("descriptionItem", "No data").toString())
+                    Spacer(modifier = Modifier.height(20.dp))
                     Button(
                         contentPadding = PaddingValues(horizontal = 50.dp),
                         onClick = {
@@ -175,7 +187,7 @@ fun DeleteAllDialog(
             deleteDialog.value = false
         },
         title = {
-            Text(text = "Delete all?")
+            Text(text = "Delete all?", fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.h5.fontSize)
         },
         buttons = {
             Row(
@@ -250,7 +262,7 @@ fun AddNewProduct(
                 openDialogAddNewProduct.value = false
             },
             title = {
-                Text(text = "Add product")
+                Text(text = "Add product", fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.h5.fontSize)
             },
             text = {
                 Column {
