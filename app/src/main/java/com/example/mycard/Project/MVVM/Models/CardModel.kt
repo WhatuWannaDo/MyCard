@@ -8,5 +8,6 @@ data class CardModel(
     @PrimaryKey(autoGenerate = true)
     var id : Int,
     val productName : String,
-    val productAmount : String
+    val productAmount : String,
+    val description : String
 )

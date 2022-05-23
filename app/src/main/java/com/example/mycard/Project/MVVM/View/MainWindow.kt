@@ -3,19 +3,19 @@ package com.example.mycard.Project.MVVM.View
 import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
@@ -27,6 +27,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
@@ -34,10 +35,14 @@ import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.mycard.MainActivity
 import com.example.mycard.Project.MVVM.Models.CardModel
+import com.example.mycard.Project.MVVM.View.Screens.Screens
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
 import com.example.mycard.Project.Room.Repository.CardRepository
+import com.example.mycard.ui.theme.Shapes
 import kotlinx.coroutines.*
 import kotlin.coroutines.coroutineContext
 
@@ -46,11 +51,12 @@ import kotlin.coroutines.coroutineContext
 
 @ExperimentalMaterialApi
 @Composable
-fun MainWindow(cardViewModel: CardViewModel, obj : MainActivity){
+fun MainWindow(cardViewModel: CardViewModel, obj : MainActivity, navController: NavController){
     val getAllProductsVM = cardViewModel.getAllProducts.collectAsState(initial = listOf()).value
     val showDialog = mutableStateOf(false)
     val deleteDialog = mutableStateOf(false)
     val openDialogAddNewProduct = remember { mutableStateOf(false) }
+    val alertDialogDescription = remember { mutableStateOf(false) }
     val api = "7e843a8220f14d5ba2891e686e661e9a"
 
     Scaffold(topBar = {
@@ -60,9 +66,11 @@ fun MainWindow(cardViewModel: CardViewModel, obj : MainActivity){
             obj = obj,
             productList = getAllProductsVM,
             openDialogAddNewProduct = openDialogAddNewProduct,
-            api = api)}
+            api = api,
+            navController = navController)
+        AlertDialogDescription(alertDialogDescription = alertDialogDescription)}
     ){
-        CustomLazyColumnItem(list = getAllProductsVM)
+        CustomLazyColumnItem(list = getAllProductsVM, alertDialogDescription = alertDialogDescription)
     }
 }
 
@@ -75,9 +83,9 @@ fun TopAppBarCard(
     obj: MainActivity,
     productList : List<CardModel>,
     openDialogAddNewProduct : MutableState<Boolean>,
-    api : String
+    api : String,
+    navController: NavController
 ){
-
     TopAppBar(modifier = Modifier.fillMaxWidth()) {
         Text(text = "Products", fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.h5.fontSize)
         Spacer(Modifier.weight(1f, true))
@@ -91,6 +99,11 @@ fun TopAppBarCard(
             deleteDialog.value = true
         }) {
             Icon(imageVector = Icons.Default.Delete, contentDescription = "DeleteAll", modifier = Modifier.size(26.dp))
+        }
+        Button(onClick = {
+            navController.navigate(route = Screens.Settings.route)
+        }) {
+            Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings", modifier = Modifier.size(26.dp))
         }
         if(showDialog.value) {
             AddNewProduct(cardViewModel = cardViewModel, showDialog = showDialog, obj = obj, openDialogAddNewProduct = openDialogAddNewProduct, api = api)
@@ -107,18 +120,48 @@ fun TopAppBarCard(
 
 @ExperimentalMaterialApi
 @Composable
-fun CustomLazyColumnItem(list : List<CardModel>) {
-
-    LazyColumn(contentPadding = PaddingValues(vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+fun CustomLazyColumnItem(list : List<CardModel>, alertDialogDescription : MutableState<Boolean>) {
+    LazyColumn(contentPadding = PaddingValues(vertical = 10.dp, horizontal = 5.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         items(list) { product ->
             ListItem(
-                modifier = Modifier.background(Color.LightGray),
+                modifier = Modifier
+                    .border(2.dp, color = Color.Green, shape = RoundedCornerShape(15.dp))
+                    .clickable {
+                        alertDialogDescription.value = true
+                    },
                 text = { Text(text = product.productName, fontSize = MaterialTheme.typography.h6.fontSize) },
                 trailing = { Text(text = "Amount: " + product.productAmount, fontSize = MaterialTheme.typography.h6.fontSize) }
             )
         }
     }
+
 }
+@ExperimentalMaterialApi
+@Composable
+fun AlertDialogDescription(alertDialogDescription: MutableState<Boolean>){
+    if(alertDialogDescription.value){
+        AlertDialog(
+            onDismissRequest = { alertDialogDescription.value = false },
+            title = { Text(text = "Description")},
+            buttons = {
+                Row(
+                    modifier = Modifier.padding(vertical = 20.dp, horizontal = 4.dp),
+                ) {
+                    Button(
+                        contentPadding = PaddingValues(horizontal = 50.dp),
+                        onClick = {
+                            alertDialogDescription.value = false
+                        }
+                    ) {
+                        Text("Ok")
+                    }
+                }
+            },
+
+        )
+    }
+}
+
 @DelicateCoroutinesApi
 @Composable
 fun DeleteAllDialog(
@@ -157,7 +200,7 @@ fun DeleteAllDialog(
                     Text("Cancel")
                 }
             }
-        }
+        },
     )
 }
 
@@ -174,6 +217,7 @@ fun AddNewProduct(
 
     var name : String by remember { mutableStateOf("") }
     var amount : String by remember { mutableStateOf("") }
+    var description : String by remember { mutableStateOf("") }
     var expanded : Boolean by remember { mutableStateOf(false)}
     var dropDownMenuItems = listOf<String>()
 
@@ -226,7 +270,7 @@ fun AddNewProduct(
                         expanded = expanded,
                         onDismissRequest = { },
                         properties = PopupProperties(focusable = false),
-                        offset = DpOffset(0.dp, (-60).dp)
+                        offset = DpOffset(0.dp, -120.dp)
                     ) {
                         dropDownMenuItems.forEach { label ->
                             DropdownMenuItem(onClick = {
@@ -250,6 +294,19 @@ fun AddNewProduct(
                             .align(Alignment.CenterHorizontally),
                         label = {Text("Amount")}
                     )
+                    OutlinedTextField(
+                        value = description,
+                        singleLine = true,
+                        onValueChange = {
+                            if(it.length <= 250) {
+                                description = it
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterHorizontally),
+                        label = {Text("Description")}
+                    )
                 }
             },
             buttons = {
@@ -258,7 +315,7 @@ fun AddNewProduct(
                 ) {
                     Button(
                         onClick = {
-                            val product = CardModel(0, name, amount)
+                            val product = CardModel(0, name, amount, description)
                             if (name.isNotEmpty() && amount.isNotEmpty()){
                                 cardViewModel.addProduct(product)
                                 openDialogAddNewProduct.value = false

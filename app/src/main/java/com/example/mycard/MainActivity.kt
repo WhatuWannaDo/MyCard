@@ -12,7 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.mycard.Project.MVVM.View.MainWindow
+import com.example.mycard.Project.MVVM.View.NavGraph.SetupNavGraph
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
 import com.example.mycard.ui.theme.MyCardTheme
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -21,6 +24,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    lateinit var navController : NavHostController
     @DelicateCoroutinesApi
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,8 +34,8 @@ class MainActivity : ComponentActivity() {
             MyCardTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    MainWindow(viewModel, this)
-
+                    navController = rememberNavController()
+                    SetupNavGraph(navHostController = navController, viewModel, this)
                 }
             }
         }

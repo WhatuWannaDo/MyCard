@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.mycard.Project.MVVM.Models.CardModel
 import com.example.mycard.Project.Room.Data.DAO.CardDAO
 
-@Database(entities = [CardModel::class], exportSchema = false, version = 2)
+@Database(entities = [CardModel::class], exportSchema = false, version = 3)
 abstract class DataBase : RoomDatabase() {
     abstract fun cardDao() : CardDAO
 
