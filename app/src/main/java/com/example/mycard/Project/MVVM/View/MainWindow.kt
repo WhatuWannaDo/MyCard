@@ -46,6 +46,8 @@ import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
 import com.example.mycard.Project.Room.Repository.CardRepository
 import com.example.mycard.ui.theme.Shapes
 import kotlinx.coroutines.*
+import me.saket.swipe.SwipeAction
+import me.saket.swipe.SwipeableActionsBox
 import kotlin.coroutines.coroutineContext
 
 @DelicateCoroutinesApi
@@ -74,7 +76,7 @@ fun MainWindow(cardViewModel: CardViewModel, obj : MainActivity, navController: 
             navController = navController)
         AlertDialogDescription(alertDialogDescription = alertDialogDescription, sharedPreferences = sharedPrefs)}
     ){
-        CustomLazyColumnItem(list = getAllProductsVM, alertDialogDescription = alertDialogDescription, sharedPreferences = sharedPrefs)
+        CustomLazyColumnItem(list = getAllProductsVM, alertDialogDescription = alertDialogDescription, sharedPreferences = sharedPrefs, viewModel = cardViewModel)
     }
 }
 
@@ -125,30 +127,49 @@ fun TopAppBarCard(
 @SuppressLint("CommitPrefEdits")
 @ExperimentalMaterialApi
 @Composable
-fun CustomLazyColumnItem(list : List<CardModel>, alertDialogDescription : MutableState<Boolean>, sharedPreferences: SharedPreferences) {
+fun CustomLazyColumnItem(list : List<CardModel>, alertDialogDescription : MutableState<Boolean>, sharedPreferences: SharedPreferences, viewModel: CardViewModel) {
     val editor = sharedPreferences.edit()
     LazyColumn(contentPadding = PaddingValues(vertical = 10.dp, horizontal = 5.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         items(list) { product ->
-            ListItem(
-                modifier = Modifier
-                    .border(2.dp, color = Color.Green, shape = RoundedCornerShape(15.dp))
-                    .clickable {
-                        alertDialogDescription.value = true
-                        editor
-                            .putString("descriptionItem", product.description.toString())
-                            .apply()
-                    },
-                text = { Text(text = product.productName, fontSize = MaterialTheme.typography.h6.fontSize) },
-                trailing = { Text(text = "Amount: " + product.productAmount, fontSize = MaterialTheme.typography.h6.fontSize) }
+
+            val archive = SwipeAction(
+                onSwipe = {
+                    viewModel.deleteProduct(CardModel(product.id, product.productName, product.productAmount, product.description))
+                },
+                icon = {Icon(imageVector = Icons.Default.Delete, contentDescription = "DeleteOnSwipe", modifier = Modifier.padding(16.dp), tint = Color.White)},
+                background = Color.Red,
             )
+            SwipeableActionsBox(endActions = listOf(archive)) {
+                ListItem(
+                    modifier = Modifier
+                        .border(2.dp, color = Color.Green, shape = RoundedCornerShape(15.dp))
+                        .background(Color.White)
+                        .clickable {
+                            alertDialogDescription.value = true
+                            editor
+                                .putString("descriptionItem", product.description.toString())
+                                .apply()
+                        },
+                    text = { Text(text = product.productName, fontSize = MaterialTheme.typography.h6.fontSize) },
+                    trailing = { Text(text = "Amount: " + product.productAmount, fontSize = MaterialTheme.typography.h6.fontSize) }
+                )
+            }
+
+
         }
     }
-
 }
+
 @SuppressLint("CommitPrefEdits")
 @ExperimentalMaterialApi
 @Composable
 fun AlertDialogDescription(alertDialogDescription: MutableState<Boolean>, sharedPreferences: SharedPreferences){
+    var text =
+        if (sharedPreferences.getString("descriptionItem", "No data").toString().isNotEmpty()) {
+            sharedPreferences.getString("descriptionItem", "No data").toString()
+        }else{
+            "No info"
+        }
     if(alertDialogDescription.value){
         AlertDialog(
             onDismissRequest = { alertDialogDescription.value = false },
@@ -157,7 +178,7 @@ fun AlertDialogDescription(alertDialogDescription: MutableState<Boolean>, shared
                 Column(
                     modifier = Modifier.padding(vertical = 20.dp, horizontal = 4.dp),
                 ) {
-                    Text(text = sharedPreferences.getString("descriptionItem", "No data").toString())
+                    Text(text = text)
                     Spacer(modifier = Modifier.height(20.dp))
                     Button(
                         contentPadding = PaddingValues(horizontal = 50.dp),
@@ -215,6 +236,7 @@ fun DeleteAllDialog(
         },
     )
 }
+
 
 
 
@@ -317,7 +339,7 @@ fun AddNewProduct(
                         modifier = Modifier
                             .fillMaxWidth()
                             .align(Alignment.CenterHorizontally),
-                        label = {Text("Description")}
+                        label = {Text("Description(optional)")}
                     )
                 }
             },
