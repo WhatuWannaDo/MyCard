@@ -139,7 +139,7 @@ fun CustomLazyColumnItem(list : List<CardModel>, alertDialogDescription : Mutabl
                 icon = {Icon(imageVector = Icons.Default.Delete, contentDescription = "DeleteOnSwipe", modifier = Modifier.padding(16.dp), tint = Color.White)},
                 background = Color.Red,
             )
-            SwipeableActionsBox(endActions = listOf(archive)) {
+            SwipeableActionsBox(endActions = listOf(archive), backgroundUntilSwipeThreshold = Color.Green, swipeThreshold = 200.dp) {
                 ListItem(
                     modifier = Modifier
                         .border(2.dp, color = Color.Green, shape = RoundedCornerShape(15.dp))
