@@ -57,9 +57,13 @@ fun ColumnSettings(sharedPrefs : SharedPreferences, progressState : MutableState
     
     // radio buttons group
     Box(Modifier.fillMaxSize()) {
-        Column(Modifier.selectableGroup()) {
+        Column(
+            Modifier
+                .selectableGroup()
+                .fillMaxSize(), verticalArrangement = Arrangement.Center) {
             searchOptions.forEach {
                 Row() {
+                    Spacer(modifier = Modifier.height(40.dp))
                     RadioButton(
                         selected = it == selectedSearchButtonOptions,
                         onClick = {
@@ -67,11 +71,12 @@ fun ColumnSettings(sharedPrefs : SharedPreferences, progressState : MutableState
                             progressState.value = true
                             editor.putString("SelectedCategory", it).apply()
                         })
-                    Text(text = it, modifier = Modifier.clickable {
+                    Text(text = it, fontSize = MaterialTheme.typography.h6.fontSize, modifier = Modifier.clickable {
                         onSearchButtonOptionsSelected(it)
                         progressState.value = true
                         editor.putString("SelectedCategory", it).apply()
-                    })
+                    },
+                    )
                 }
             }
 
