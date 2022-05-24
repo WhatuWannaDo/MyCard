@@ -3,6 +3,7 @@ package com.example.mycard.Project.MVVM.ViewModels
 import android.app.Application
 import androidx.lifecycle.*
 import com.example.mycard.Project.MVVM.Models.CardModel
+import com.example.mycard.Project.MVVM.Models.GroceryModel
 import com.example.mycard.Project.MVVM.Models.HeadModel
 import com.example.mycard.Project.Room.Data.DataBase.DataBase
 import com.example.mycard.Project.Room.Repository.CardRepository
@@ -17,6 +18,7 @@ class CardViewModel(application: Application) : AndroidViewModel(application) {
     val getAllProducts : Flow<List<CardModel>>
     private val cardRepository : CardRepository
     var myResponse: MutableLiveData<Response<List<HeadModel>>> = MutableLiveData()
+    val groceryResponse : MutableLiveData<Response<GroceryModel>> = MutableLiveData()
 
     init {
         val cardDAO = DataBase.getDatabase(application).cardDao()
@@ -46,6 +48,13 @@ class CardViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch{
             val response = cardRepository.getTextFromApi(apiKey, text, value)
             myResponse.value = response
+        }
+    }
+
+    fun getGroceryApi(apiKey : String, text : String, value:String){
+        viewModelScope.launch {
+            val response = cardRepository.getGroceryFromApi(apiKey, text, value)
+            groceryResponse.value = response
         }
     }
 

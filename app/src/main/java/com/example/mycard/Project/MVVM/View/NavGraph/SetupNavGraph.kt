@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.mycard.MainActivity
+import com.example.mycard.Project.MVVM.Models.GroceryModel
 import com.example.mycard.Project.MVVM.View.*
 import com.example.mycard.Project.MVVM.View.Screens.Screens
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
@@ -31,7 +32,7 @@ fun SetupNavGraph(navHostController: NavHostController, cardViewModel: CardViewM
             MenuItemSearchScreen(navHostController)
         })
         composable(route = Screens.GroceryProductsSearch.route, content = {
-            GroceryProductsSearchScreen(navHostController)
+            GroceryProductsSearchScreen(navHostController, cardViewModel, obj)
         })
         composable(route = Screens.RecipesSearch.route, content = {
             RecipesSearchScreen(navHostController)

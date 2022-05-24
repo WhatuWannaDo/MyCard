@@ -134,7 +134,6 @@ fun CustomLazyColumnItem(list : List<CardModel>, alertDialogDescription : Mutabl
     val editor = sharedPreferences.edit()
     LazyColumn(contentPadding = PaddingValues(vertical = 10.dp, horizontal = 5.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         items(list) { product ->
-
             //swipe to delete
 
             val archive = SwipeAction(
