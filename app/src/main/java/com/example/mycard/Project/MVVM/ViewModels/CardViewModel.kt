@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.example.mycard.Project.MVVM.Models.CardModel
 import com.example.mycard.Project.MVVM.Models.GroceryModel
 import com.example.mycard.Project.MVVM.Models.HeadModel
+import com.example.mycard.Project.MVVM.Models.MenuItemsModel
 import com.example.mycard.Project.Room.Data.DataBase.DataBase
 import com.example.mycard.Project.Room.Repository.CardRepository
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,7 @@ class CardViewModel(application: Application) : AndroidViewModel(application) {
     private val cardRepository : CardRepository
     var myResponse: MutableLiveData<Response<List<HeadModel>>> = MutableLiveData()
     val groceryResponse : MutableLiveData<Response<GroceryModel>> = MutableLiveData()
+    val menuItemsResponse : MutableLiveData<Response<MenuItemsModel>> = MutableLiveData()
 
     init {
         val cardDAO = DataBase.getDatabase(application).cardDao()
@@ -55,6 +57,13 @@ class CardViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             val response = cardRepository.getGroceryFromApi(apiKey, text, value)
             groceryResponse.value = response
+        }
+    }
+
+    fun getMenuItemsApi(apiKey : String, text : String, value:String){
+        viewModelScope.launch {
+            val response = cardRepository.getMenuItemsFromApi(apiKey, text, value)
+            menuItemsResponse.value = response
         }
     }
 

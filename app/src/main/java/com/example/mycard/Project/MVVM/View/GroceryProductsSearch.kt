@@ -83,17 +83,7 @@ fun CustomLazyColumnGroceryItem(viewModel: CardViewModel, obj : MainActivity) {
                     400 -> Toast.makeText(obj, "Can't validate call", Toast.LENGTH_SHORT).show()
                     401 -> Toast.makeText(obj, "Non authorized", Toast.LENGTH_SHORT).show()
                 }
-                Log.e("Response", "NOT_SUCCESS")
             }
         })
     }
 }
-
-/*
-                            ListItem(
-                                modifier = Modifier
-                                    .border(2.dp, color = Color.Green, shape = RoundedCornerShape(15.dp))
-                                    .background(Color.White),
-                                text = { Text(text = grocery.title, fontSize = MaterialTheme.typography.h6.fontSize) }
-                            )
- */

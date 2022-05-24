@@ -3,6 +3,7 @@ package com.example.mycard.Project.Room.Repository
 import com.example.mycard.Project.MVVM.Models.CardModel
 import com.example.mycard.Project.MVVM.Models.GroceryModel
 import com.example.mycard.Project.MVVM.Models.HeadModel
+import com.example.mycard.Project.MVVM.Models.MenuItemsModel
 import com.example.mycard.Project.Network.DictApiObject
 import com.example.mycard.Project.Room.Data.DAO.CardDAO
 import kotlinx.coroutines.flow.Flow
@@ -30,4 +31,7 @@ class CardRepository(private val cardDAO: CardDAO) {
         return DictApiObject.api.getGroceryFromApi(apiKey, text, value)
     }
 
+    suspend fun getMenuItemsFromApi(apiKey : String, text : String, value:String) : Response<MenuItemsModel>{
+        return DictApiObject.api.getMenuItemsApi(apiKey, text, value)
+    }
 }
