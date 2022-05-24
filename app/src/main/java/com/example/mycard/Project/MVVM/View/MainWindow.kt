@@ -156,11 +156,20 @@ fun CustomLazyColumnItem(list : List<CardModel>, alertDialogDescription : Mutabl
                                 .apply()
                         },
                     text = { Text(text = product.productName, fontSize = MaterialTheme.typography.h6.fontSize) },
-                    trailing = { Text(text = "Amount: " + product.productAmount, fontSize = MaterialTheme.typography.h6.fontSize) }
+                    trailing = { Text(text = "Amount: " + product.productAmount, fontSize = MaterialTheme.typography.h6.fontSize) },
                 )
             }
 
-
+/*
+                        Icon(
+                            imageVector = Icons.Default.Favorite,
+                            contentDescription = "Favorite",
+                            Modifier
+                                .padding(horizontal = )
+                                .clickable {
+                                    Log.e("Test", "Added to favorites")
+                                })
+ */
         }
     }
 }
@@ -260,34 +269,7 @@ fun AddNewProduct(
     var expanded : Boolean by remember { mutableStateOf(false)}
     var dropDownMenuItems = listOf<String>()
 
-    cardViewModel.getTextApi(api, name, "5")
 
-    //trying to get value from api
-
-    cardViewModel.myResponse.observe(obj, Observer { response ->
-        val result = response.body()?.size
-        if(response.isSuccessful) {
-            if (response.body().isNullOrEmpty()) {}
-            else{
-                if (result != null) {
-
-                    //setting dropdown menu items
-
-                    dropDownMenuItems = response.body()?.subList(0,result)?.map {
-                        it.name
-                    }!!
-                }
-            }
-        }else{
-            when(response.code()){
-                500 -> Toast.makeText(obj, "Server error", Toast.LENGTH_SHORT).show()
-                423 -> Toast.makeText(obj, "Server blocked", Toast.LENGTH_SHORT).show()
-                410 -> Toast.makeText(obj, "The server isn't exist", Toast.LENGTH_SHORT).show()
-                400 -> Toast.makeText(obj, "Can't validate call", Toast.LENGTH_SHORT).show()
-                401 -> Toast.makeText(obj, "Non authorized", Toast.LENGTH_SHORT).show()
-            }
-        }
-    })
     //add new product alert dialog
     if (openDialogAddNewProduct.value) {
         AlertDialog(
@@ -303,6 +285,34 @@ fun AddNewProduct(
                         value = name,
                         onValueChange = {
                             expanded = true
+                            cardViewModel.getTextApi(api, name, "5")
+
+                            //trying to get value from api
+
+                            cardViewModel.myResponse.observe(obj, Observer { response ->
+                                val result = response.body()?.size
+                                if(response.isSuccessful) {
+                                    if (response.body().isNullOrEmpty()) {}
+                                    else{
+                                        if (result != null) {
+
+                                            //setting dropdown menu items
+
+                                            dropDownMenuItems = response.body()?.subList(0,result)?.map {
+                                                it.name
+                                            }!!
+                                        }
+                                    }
+                                }else{
+                                    when(response.code()){
+                                        500 -> Toast.makeText(obj, "Server error", Toast.LENGTH_SHORT).show()
+                                        423 -> Toast.makeText(obj, "Server blocked", Toast.LENGTH_SHORT).show()
+                                        410 -> Toast.makeText(obj, "The server isn't exist", Toast.LENGTH_SHORT).show()
+                                        400 -> Toast.makeText(obj, "Can't validate call", Toast.LENGTH_SHORT).show()
+                                        401 -> Toast.makeText(obj, "Non authorized", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            })
                             if(it.length <= 50) {
                                 name = it
                             }

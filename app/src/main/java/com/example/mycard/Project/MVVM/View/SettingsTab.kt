@@ -1,6 +1,7 @@
 package com.example.mycard.Project.MVVM.View
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.util.Log
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.mycard.MainActivity
 import com.example.mycard.Project.MVVM.View.NavGraph.getDest
+import com.example.mycard.Project.MVVM.View.Screens.Screens
 import kotlinx.coroutines.*
 
 @DelicateCoroutinesApi
@@ -30,7 +32,7 @@ fun SettingsTab(navController: NavController, obj : MainActivity){
     val progressState = mutableStateOf(false)
 
     Scaffold(topBar = { TopAppBarSettings(navController = navController, obj = obj)}) {
-        ColumnSettings(sharedPrefs = sharedPrefs, progressState = progressState)
+        ColumnSettings(sharedPrefs = sharedPrefs, progressState = progressState, obj)
         ProgressBarCircular(progressState = progressState)
     }
 
@@ -48,28 +50,32 @@ fun TopAppBarSettings(navController: NavController, obj: MainActivity){
 @SuppressLint("UnrememberedMutableState")
 @ExperimentalMaterialApi
 @Composable
-fun ColumnSettings(sharedPrefs : SharedPreferences, progressState : MutableState<Boolean>){
+fun ColumnSettings(sharedPrefs : SharedPreferences, progressState : MutableState<Boolean>, obj: MainActivity){
     val searchOptions = listOf("Recipes Search","Ingredient Search","Grocery Products Search", "Menu Items Search")
-    val (selectedSearchButtonOptions, onSearchButtonOptionsSelected) = remember { mutableStateOf(searchOptions[0]) }
+    val (selectedSearchButtonOptions, onSearchButtonOptionsSelected) = remember { mutableStateOf(searchOptions[getRadioButtonNumber(obj)]) }
     val editor = sharedPrefs.edit()
-
+    
     // radio buttons group
-    Column(Modifier.selectableGroup()) {
-        searchOptions.forEach {
-            Row() {
-                RadioButton(
-                    selected = it == selectedSearchButtonOptions,
-                    onClick = {
+    Box(Modifier.fillMaxSize()) {
+        Column(Modifier.selectableGroup()) {
+            searchOptions.forEach {
+                Row() {
+                    RadioButton(
+                        selected = it == selectedSearchButtonOptions,
+                        onClick = {
+                            onSearchButtonOptionsSelected(it)
+                            progressState.value = true
+                            editor.putString("SelectedCategory", it).apply()
+                        })
+                    Text(text = it, modifier = Modifier.clickable {
                         onSearchButtonOptionsSelected(it)
                         progressState.value = true
                         editor.putString("SelectedCategory", it).apply()
-                              })
-                Text(text = it, modifier = Modifier.clickable {
-                    onSearchButtonOptionsSelected(it)
-                })
+                    })
+                }
             }
-        }
 
+        }
     }
 }
 @DelicateCoroutinesApi
@@ -86,4 +92,17 @@ fun ProgressBarCircular(progressState : MutableState<Boolean>){
             }
         }
     }
+}
+
+
+
+fun getRadioButtonNumber(obj: MainActivity) : Int {
+    val sharedPrefsSettings : SharedPreferences = obj.getSharedPreferences("Category", Context.MODE_PRIVATE)
+    when(sharedPrefsSettings.getString("SelectedCategory", "No Data").toString()){
+        "Recipes Search" -> return 0
+        "Ingredient Search" -> return 1
+        "Grocery Products Search" -> return 2
+        "Menu Items Search" -> return 3
+    }
+    return -1
 }
