@@ -322,7 +322,7 @@ fun AddNewProduct(
                     )
                     DropdownMenu(
                         expanded = expanded,
-                        onDismissRequest = { },
+                        onDismissRequest = { expanded = false },
                         properties = PopupProperties(focusable = false),
                         offset = DpOffset(0.dp, -120.dp)
                     ) {

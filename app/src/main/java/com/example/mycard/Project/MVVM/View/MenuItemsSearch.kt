@@ -39,7 +39,7 @@ fun TopAppBarMenu(navController: NavController){
     TopAppBar(modifier = Modifier.fillMaxWidth()) {
         Text(text = "Menu Items", fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.h5.fontSize)
         Spacer(Modifier.weight(1f, true))
-        Icon(imageVector = Icons.Default.Search, contentDescription = "Search Grocery", modifier = Modifier.clickable {
+        Icon(imageVector = Icons.Default.Search, contentDescription = "Search MenuItems", modifier = Modifier.clickable {
             //TODO: add search tab
         })
         Button(onClick = { navController.navigate(route = Screens.Settings.route) }) {
