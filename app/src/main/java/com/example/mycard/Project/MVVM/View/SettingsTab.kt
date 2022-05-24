@@ -52,6 +52,8 @@ fun ColumnSettings(sharedPrefs : SharedPreferences, progressState : MutableState
     val searchOptions = listOf("Recipes Search","Ingredient Search","Grocery Products Search", "Menu Items Search")
     val (selectedSearchButtonOptions, onSearchButtonOptionsSelected) = remember { mutableStateOf(searchOptions[0]) }
     val editor = sharedPrefs.edit()
+
+    // radio buttons group
     Column(Modifier.selectableGroup()) {
         searchOptions.forEach {
             Row() {
@@ -74,6 +76,7 @@ fun ColumnSettings(sharedPrefs : SharedPreferences, progressState : MutableState
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun ProgressBarCircular(progressState : MutableState<Boolean>){
+    //progress bar creating after choosing some radio button. Thats need for time to write shared prefs into a memory
     if(progressState.value){
         Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
             CircularProgressIndicator()

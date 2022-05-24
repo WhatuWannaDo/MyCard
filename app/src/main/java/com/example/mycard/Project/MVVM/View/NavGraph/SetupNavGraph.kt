@@ -39,6 +39,7 @@ fun SetupNavGraph(navHostController: NavHostController, cardViewModel: CardViewM
     }
 }
 
+//getting destinations from shared prefs
 fun getDest(obj: MainActivity) : String {
     val sharedPrefsSettings : SharedPreferences = obj.getSharedPreferences("Category", Context.MODE_PRIVATE)
     when(sharedPrefsSettings.getString("SelectedCategory", "No Data").toString()){
@@ -50,13 +51,3 @@ fun getDest(obj: MainActivity) : String {
     return "No data"
 }
 
-/*
-    val sharedPrefsSettings : SharedPreferences = obj.getSharedPreferences("Category", MODE_PRIVATE)
-    when(sharedPrefsSettings.getString("SelectedCategory", "No Data").toString()){
-        "Recipes Search" -> navController.navigate(route = Screens.RecipesSearch.route)
-        "Ingredient Search" -> navController.navigate(route = Screens.Home.route)
-        "Grocery Products Search" -> navController.navigate(route = Screens.GroceryProductsSearch.route)
-        "Menu Items Search" -> navController.navigate(route = Screens.MenuItemsSearch.route)
-        "No Data" -> Toast.makeText(obj, "Unknown Error", Toast.LENGTH_SHORT).show()
-    }
- */

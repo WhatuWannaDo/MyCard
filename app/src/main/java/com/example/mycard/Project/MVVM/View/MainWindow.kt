@@ -135,6 +135,8 @@ fun CustomLazyColumnItem(list : List<CardModel>, alertDialogDescription : Mutabl
     LazyColumn(contentPadding = PaddingValues(vertical = 10.dp, horizontal = 5.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         items(list) { product ->
 
+            //swipe to delete
+
             val archive = SwipeAction(
                 onSwipe = {
                     viewModel.deleteProduct(CardModel(product.id, product.productName, product.productAmount, product.description))
@@ -162,7 +164,7 @@ fun CustomLazyColumnItem(list : List<CardModel>, alertDialogDescription : Mutabl
         }
     }
 }
-
+// alert dialog for description when item from lazy column selected
 @SuppressLint("CommitPrefEdits")
 @ExperimentalMaterialApi
 @Composable
@@ -260,12 +262,17 @@ fun AddNewProduct(
 
     cardViewModel.getTextApi(api, name, "5")
 
+    //trying to get value from api
+
     cardViewModel.myResponse.observe(obj, Observer { response ->
         val result = response.body()?.size
         if(response.isSuccessful) {
             if (response.body().isNullOrEmpty()) {}
             else{
                 if (result != null) {
+
+                    //setting dropdown menu items
+
                     dropDownMenuItems = response.body()?.subList(0,result)?.map {
                         it.name
                     }!!
@@ -281,6 +288,7 @@ fun AddNewProduct(
             }
         }
     })
+    //add new product alert dialog
     if (openDialogAddNewProduct.value) {
         AlertDialog(
             onDismissRequest = {
@@ -350,6 +358,9 @@ fun AddNewProduct(
                 Row(
                     modifier = Modifier.padding(all = 8.dp),
                 ) {
+
+                    //add item into a data base
+
                     Button(
                         onClick = {
                             val product = CardModel(0, name, amount, description)
