@@ -1,6 +1,7 @@
 package com.example.mycard.Project.MVVM.View
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.util.Log
