@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -44,13 +45,20 @@ fun GroceryProductsSearchScreen(navController: NavController, viewModel: CardVie
 
 @Composable
 fun TopAppBarGrocery(navController: NavController){
+    val buttonMode : Color
+    val iconMode = Color.White
+    if (isSystemInDarkTheme()){
+        buttonMode = Color(39,39,39)
+    }else{
+        buttonMode = Color(98,0,238)
+    }
     TopAppBar(modifier = Modifier.fillMaxWidth()) {
         Text(text = "Grocery", fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.h5.fontSize)
         Spacer(Modifier.weight(1f, true))
-        Icon(imageVector = Icons.Default.Search, contentDescription = "Search Grocery", modifier = Modifier.clickable {
+        Icon(imageVector = Icons.Default.Search, contentDescription = "Search Grocery", tint = iconMode, modifier = Modifier.clickable {
             //TODO: add search tab
         })
-        Button(onClick = { navController.navigate(route = Screens.Settings.route) }) {
+        Button(onClick = { navController.navigate(route = Screens.Settings.route) }, colors = ButtonDefaults.buttonColors(backgroundColor = buttonMode)) {
             Icon(imageVector = Icons.Default.Settings, contentDescription = "SettingsGrocery")
         }
     }
@@ -61,6 +69,15 @@ fun TopAppBarGrocery(navController: NavController){
 @ExperimentalMaterialApi
 @Composable
 fun CustomLazyColumnGroceryItem(viewModel: CardViewModel, obj : MainActivity) {
+    val backgroundMode : Color
+    val strokeMode : Color
+    if (isSystemInDarkTheme()){
+        backgroundMode = Color(20,20,20)
+        strokeMode = Color.Yellow
+    }else{
+        backgroundMode = Color.White
+        strokeMode = Color.Blue
+    }
     LazyColumn(contentPadding = PaddingValues(vertical = 10.dp, horizontal = 5.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         viewModel.groceryResponse.observe(obj, Observer {response ->
             val result = response.body()?.products?.size
@@ -69,8 +86,8 @@ fun CustomLazyColumnGroceryItem(viewModel: CardViewModel, obj : MainActivity) {
                     items(response.body()?.products!!){
                         ListItem(
                             modifier = Modifier
-                                .border(2.dp, color = Color.Blue, shape = RoundedCornerShape(15.dp))
-                                .background(Color.White),
+                                .border(2.dp, color = strokeMode, shape = RoundedCornerShape(15.dp))
+                                .background(backgroundMode),
                             text = { Text(text = it.title, fontSize = MaterialTheme.typography.h6.fontSize) }
                         )
                     }

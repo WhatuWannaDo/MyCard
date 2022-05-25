@@ -6,6 +6,7 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectableGroup
 
@@ -15,7 +16,9 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.mycard.MainActivity
@@ -40,9 +43,16 @@ fun SettingsTab(navController: NavController, obj : MainActivity){
 }
 @Composable
 fun TopAppBarSettings(navController: NavController, obj: MainActivity){
+    val buttonMode : Color
+    val iconMode = Color.White
+    if (isSystemInDarkTheme()){
+        buttonMode = Color(39,39,39)
+    }else{
+        buttonMode = Color(98,0,238)
+    }
     TopAppBar(Modifier.fillMaxWidth()) {
-        Button(onClick = {  navController.navigate(route = getDest(obj = obj))  }) {
-            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "BackToMain", modifier = Modifier.size(26.dp))
+        Button(onClick = {  navController.navigate(route = getDest(obj = obj))  }, colors = ButtonDefaults.buttonColors(backgroundColor = buttonMode)) {
+            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "BackToMain", modifier = Modifier.size(26.dp), tint = iconMode)
         }
         Text(text = "Settings", fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.h5.fontSize)
     }
@@ -54,33 +64,41 @@ fun ColumnSettings(sharedPrefs : SharedPreferences, progressState : MutableState
     val searchOptions = listOf("Recipes Search","Ingredient Search","Grocery Products Search", "Menu Items Search")
     val (selectedSearchButtonOptions, onSearchButtonOptionsSelected) = remember { mutableStateOf(searchOptions[getRadioButtonNumber(obj)]) }
     val editor = sharedPrefs.edit()
-    
     // radio buttons group
-    Box(Modifier.fillMaxSize()) {
-        Column(
-            Modifier
-                .selectableGroup()
-                .fillMaxSize(), verticalArrangement = Arrangement.Center) {
-            searchOptions.forEach {
-                Row() {
-                    Spacer(modifier = Modifier.height(40.dp))
-                    RadioButton(
-                        selected = it == selectedSearchButtonOptions,
-                        onClick = {
-                            onSearchButtonOptionsSelected(it)
-                            progressState.value = true
-                            editor.putString("SelectedCategory", it).apply()
-                        })
-                    Text(text = it, fontSize = MaterialTheme.typography.h6.fontSize, modifier = Modifier.clickable {
+    
+    Column(
+        Modifier
+            .selectableGroup()
+            .padding(vertical = 60.dp, horizontal = 20.dp),
+    ) {
+        searchOptions.forEach {
+            Row() {
+                Spacer(modifier = Modifier.height(40.dp))
+                RadioButton(
+                    selected = it == selectedSearchButtonOptions,
+                    onClick = {
                         onSearchButtonOptionsSelected(it)
                         progressState.value = true
                         editor.putString("SelectedCategory", it).apply()
-                    },
-                    )
-                }
+                    })
+                Text(text = it, fontSize = MaterialTheme.typography.h6.fontSize, modifier = Modifier.clickable {
+                    onSearchButtonOptionsSelected(it)
+                    progressState.value = true
+                    editor.putString("SelectedCategory", it).apply()
+                })
             }
-
         }
+    }
+    Column(
+        Modifier
+            .padding(vertical = 20.dp, horizontal = 10.dp)) {
+        Text(text = "Categories:", fontSize = MaterialTheme.typography.h5.fontSize)
+    }
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(vertical = 220.dp, horizontal = 10.dp)) {
+        Text(text = "After select any category, \nwait until progress will finish", color = Color.DarkGray)
     }
 }
 @DelicateCoroutinesApi
@@ -89,7 +107,10 @@ fun ColumnSettings(sharedPrefs : SharedPreferences, progressState : MutableState
 fun ProgressBarCircular(progressState : MutableState<Boolean>){
     //progress bar creating after choosing some radio button. Thats need for time to write shared prefs into a memory
     if(progressState.value){
-        Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(vertical = 20.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Bottom) {
             CircularProgressIndicator()
             GlobalScope.launch(Dispatchers.Default) {
                 delay(2000)
@@ -111,3 +132,8 @@ fun getRadioButtonNumber(obj: MainActivity) : Int {
     }
     return -1
 }
+
+/*
+    ключ - значение
+
+ */

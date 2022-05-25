@@ -6,10 +6,7 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -45,6 +42,8 @@ import com.example.mycard.Project.MVVM.Models.CardModel
 import com.example.mycard.Project.MVVM.View.Screens.Screens
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
 import com.example.mycard.Project.Room.Repository.CardRepository
+import com.example.mycard.ui.theme.Purple200
+import com.example.mycard.ui.theme.Purple700
 import com.example.mycard.ui.theme.Shapes
 import kotlinx.coroutines.*
 import me.saket.swipe.SwipeAction
@@ -93,24 +92,31 @@ fun TopAppBarCard(
     api : String,
     navController: NavController
 ){
+    val buttonMode : Color
+    val iconMode = Color.White
+    if (isSystemInDarkTheme()){
+        buttonMode = Color(39,39,39)
+    }else{
+        buttonMode = Color(98,0,238)
+    }
     TopAppBar(modifier = Modifier.fillMaxWidth()) {
         Text(text = "Ingredients", fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.h5.fontSize)
         Spacer(Modifier.weight(1f, true))
         Button(onClick = {
             openDialogAddNewProduct.value = true
             showDialog.value = true
-        }) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = "AddProduct", modifier = Modifier.size(26.dp))
+        }, colors = ButtonDefaults.buttonColors(backgroundColor = buttonMode)) {
+            Icon(imageVector = Icons.Default.Add, contentDescription = "AddProduct", modifier = Modifier.size(26.dp), tint = iconMode)
         }
         Button(onClick = {
             deleteDialog.value = true
-        }) {
-            Icon(imageVector = Icons.Default.Delete, contentDescription = "DeleteAll", modifier = Modifier.size(26.dp))
+        }, colors = ButtonDefaults.buttonColors(backgroundColor = buttonMode)) {
+            Icon(imageVector = Icons.Default.Delete, contentDescription = "DeleteAll", modifier = Modifier.size(26.dp), tint = iconMode)
         }
         Button(onClick = {
             navController.navigate(route = Screens.Settings.route)
-        }) {
-            Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings", modifier = Modifier.size(26.dp))
+        }, colors = ButtonDefaults.buttonColors(backgroundColor = buttonMode)) {
+            Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings", modifier = Modifier.size(26.dp), tint = iconMode)
         }
         if(showDialog.value) {
             AddNewProduct(cardViewModel = cardViewModel, showDialog = showDialog, obj = obj, openDialogAddNewProduct = openDialogAddNewProduct, api = api)
@@ -132,6 +138,12 @@ fun TopAppBarCard(
 @Composable
 fun CustomLazyColumnItem(list : List<CardModel>, alertDialogDescription : MutableState<Boolean>, sharedPreferences: SharedPreferences, viewModel: CardViewModel) {
     val editor = sharedPreferences.edit()
+    val backgroundMode : Color
+    if (isSystemInDarkTheme()){
+        backgroundMode = Color(20,20,20)
+    }else{
+        backgroundMode = Color.White
+    }
     LazyColumn(contentPadding = PaddingValues(vertical = 10.dp, horizontal = 5.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         items(list) { product ->
             //swipe to delete
@@ -147,7 +159,7 @@ fun CustomLazyColumnItem(list : List<CardModel>, alertDialogDescription : Mutabl
                 ListItem(
                     modifier = Modifier
                         .border(2.dp, color = Color.Green, shape = RoundedCornerShape(15.dp))
-                        .background(Color.White)
+                        .background(backgroundMode)
                         .clickable {
                             alertDialogDescription.value = true
                             editor
