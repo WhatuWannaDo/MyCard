@@ -24,11 +24,12 @@ import androidx.navigation.NavController
 import com.example.mycard.MainActivity
 import com.example.mycard.Project.MVVM.View.Screens.Screens
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
+import com.example.mycard.Project.Network.API_KEY
 
 @ExperimentalMaterialApi
 @Composable
 fun MenuItemSearchScreen(navController: NavController, viewModel: CardViewModel, obj: MainActivity){
-    viewModel.getMenuItemsApi("7e843a8220f14d5ba2891e686e661e9a", "choco", "30")
+    viewModel.getMenuItemsApi(API_KEY, "choco", "30")
 
     Scaffold(topBar = { TopAppBarMenu(navController = navController) }) {
         CustomLazyColumnMenuItem(viewModel, obj)
@@ -89,6 +90,7 @@ fun CustomLazyColumnMenuItem(viewModel: CardViewModel, obj : MainActivity) {
                     410 -> Toast.makeText(obj, "The server isn't exist", Toast.LENGTH_SHORT).show()
                     400 -> Toast.makeText(obj, "Can't validate call", Toast.LENGTH_SHORT).show()
                     401 -> Toast.makeText(obj, "Non authorized", Toast.LENGTH_SHORT).show()
+                    402 -> Toast.makeText(obj, "Limited", Toast.LENGTH_SHORT).show()
                 }
             }
         })

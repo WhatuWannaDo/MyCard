@@ -41,6 +41,7 @@ import com.example.mycard.MainActivity
 import com.example.mycard.Project.MVVM.Models.CardModel
 import com.example.mycard.Project.MVVM.View.Screens.Screens
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
+import com.example.mycard.Project.Network.API_KEY
 import com.example.mycard.Project.Room.Repository.CardRepository
 import com.example.mycard.ui.theme.Purple200
 import com.example.mycard.ui.theme.Purple700
@@ -61,7 +62,7 @@ fun MainWindow(cardViewModel: CardViewModel, obj : MainActivity, navController: 
     val deleteDialog = mutableStateOf(false)
     val openDialogAddNewProduct = remember { mutableStateOf(false) }
     val alertDialogDescription = remember { mutableStateOf(false) }
-    val api = "7e843a8220f14d5ba2891e686e661e9a"
+    val api = API_KEY
 
     val sharedPrefs : SharedPreferences = obj.getSharedPreferences("descr", MODE_PRIVATE)
 
@@ -321,6 +322,8 @@ fun AddNewProduct(
                                         410 -> Toast.makeText(obj, "The server isn't exist", Toast.LENGTH_SHORT).show()
                                         400 -> Toast.makeText(obj, "Can't validate call", Toast.LENGTH_SHORT).show()
                                         401 -> Toast.makeText(obj, "Non authorized", Toast.LENGTH_SHORT).show()
+                                        402 -> Toast.makeText(obj, "Limited", Toast.LENGTH_SHORT).show()
+
                                     }
                                 }
                             })

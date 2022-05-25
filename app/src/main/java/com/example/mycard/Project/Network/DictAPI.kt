@@ -7,6 +7,8 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+const val API_KEY = "7e843a8220f14d5ba2891e686e661e9a"
+
 interface DictAPI {
 
     @GET("food/ingredients/autocomplete")

@@ -30,13 +30,14 @@ import com.example.mycard.Project.MVVM.Models.CardModel
 import com.example.mycard.Project.MVVM.Models.GroceryModel
 import com.example.mycard.Project.MVVM.View.Screens.Screens
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
+import com.example.mycard.Project.Network.API_KEY
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
 
 @ExperimentalMaterialApi
 @Composable
 fun GroceryProductsSearchScreen(navController: NavController, viewModel: CardViewModel, obj: MainActivity){
-    viewModel.getGroceryApi("7e843a8220f14d5ba2891e686e661e9a", "choco", "30")
+    viewModel.getGroceryApi(API_KEY, "choco", "30")
 
     Scaffold(topBar = { TopAppBarGrocery(navController = navController) }) {
         CustomLazyColumnGroceryItem(viewModel, obj)
@@ -99,6 +100,8 @@ fun CustomLazyColumnGroceryItem(viewModel: CardViewModel, obj : MainActivity) {
                     410 -> Toast.makeText(obj, "The server isn't exist", Toast.LENGTH_SHORT).show()
                     400 -> Toast.makeText(obj, "Can't validate call", Toast.LENGTH_SHORT).show()
                     401 -> Toast.makeText(obj, "Non authorized", Toast.LENGTH_SHORT).show()
+                    402 -> Toast.makeText(obj, "Limited", Toast.LENGTH_SHORT).show()
+
                 }
             }
         })
