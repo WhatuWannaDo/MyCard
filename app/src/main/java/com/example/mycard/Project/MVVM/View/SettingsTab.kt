@@ -124,7 +124,7 @@ fun ProgressBarCircular(progressState : MutableState<Boolean>){
 
 fun getRadioButtonNumber(obj: MainActivity) : Int {
     val sharedPrefsSettings : SharedPreferences = obj.getSharedPreferences("Category", Context.MODE_PRIVATE)
-    when(sharedPrefsSettings.getString("SelectedCategory", "No Data").toString()){
+    when(sharedPrefsSettings.getString("SelectedCategory", "Ingredient Search").toString()){
         "Recipes Search" -> return 0
         "Ingredient Search" -> return 1
         "Grocery Products Search" -> return 2

@@ -37,13 +37,16 @@ fun SetupNavGraph(navHostController: NavHostController, cardViewModel: CardViewM
         composable(route = Screens.RecipesSearch.route, content = {
             RecipesSearchScreen(navHostController)
         })
+        composable(route = Screens.RecipesSearchValues.route, content = {
+            RecipesValuesScreen(navHostController)
+        })
     }
 }
 
 //getting destinations from shared prefs
 fun getDest(obj: MainActivity) : String {
     val sharedPrefsSettings : SharedPreferences = obj.getSharedPreferences("Category", Context.MODE_PRIVATE)
-    when(sharedPrefsSettings.getString("SelectedCategory", "No Data").toString()){
+    when(sharedPrefsSettings.getString("SelectedCategory", "Ingredient Search").toString()){
         "Recipes Search" -> return Screens.RecipesSearch.route
         "Ingredient Search" -> return Screens.Home.route
         "Grocery Products Search" -> return Screens.GroceryProductsSearch.route
