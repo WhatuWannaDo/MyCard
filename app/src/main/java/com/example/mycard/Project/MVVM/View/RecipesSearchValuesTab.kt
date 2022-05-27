@@ -183,7 +183,8 @@ fun EditTexts(viewModel: CardViewModel, obj : MainActivity, navController: NavCo
 
                     viewModel.recipesResponse.observe(obj, Observer {
                         if(it.isSuccessful){
-                            val encodedObject = URLEncoder.encode(it.body().toString(), StandardCharsets.UTF_8.toString())
+                            //получаем ссылку из полученного объекта и отправляем её в через навигацию
+                            val encodedObject = URLEncoder.encode(it.raw().request.url.toString(), StandardCharsets.UTF_8.toString())
                             navController.navigate(route = Screens.RecipesSearch.passObject(encodedObject))
                         }
                     })

@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
+import java.net.URL
 
 class CardViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -19,6 +20,8 @@ class CardViewModel(application: Application) : AndroidViewModel(application) {
     val groceryResponse : MutableLiveData<Response<GroceryModel>> = MutableLiveData()
     val menuItemsResponse : MutableLiveData<Response<MenuItemsModel>> = MutableLiveData()
     val recipesResponse : MutableLiveData<Response<RecipesModel>> = MutableLiveData()
+    val urlResponse : MutableLiveData<Response<RecipesModel>> = MutableLiveData()
+
 
 
     init {
@@ -118,6 +121,13 @@ class CardViewModel(application: Application) : AndroidViewModel(application) {
                 maxSugar,
                 value)
             recipesResponse.value = response
+        }
+    }
+
+    fun getByURL(url: String){
+        viewModelScope.launch {
+            val response = cardRepository.getByURL(url)
+            urlResponse.value = response
         }
     }
     class CardViewModelFactory(private val application: Application) : ViewModelProvider.Factory {

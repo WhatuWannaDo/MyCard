@@ -3,7 +3,6 @@ package com.example.mycard.Project.MVVM.View
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
@@ -14,18 +13,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
+import com.example.mycard.MainActivity
 import com.example.mycard.Project.MVVM.View.Screens.Screens
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
-import org.json.JSONObject
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
 @Composable
-fun RecipesSearchScreen(navController: NavController, responseObject : String){
+fun RecipesSearchScreen(navController: NavController, responseObject : String, viewModel: CardViewModel, obj : MainActivity){
+    //декодим полученную ссылку в нормальную и вызываем метод по обработке этой ссылки
     val urlDecodedObject = URLDecoder.decode(responseObject, StandardCharsets.UTF_8.toString())
-    Log.e("argument", urlDecodedObject)
-    //TODO: как то спарсить нужные значения из строки
+    viewModel.getByURL(urlDecodedObject)
+    viewModel.urlResponse.observe(obj, Observer { response ->
+        if(response.isSuccessful){
+            response.body()?.results?.forEach {
+                Log.e("Result", it.title)
+                it.nutrition.nutrients.forEach { nutrition ->
+                    Log.e("ResultNutrients", nutrition.name)
+                }
+            }
+        }
+    })
     Scaffold(topBar = { TopAppBarRecipes(navController = navController) }) {
     }
 }

@@ -7,6 +7,8 @@ import com.example.mycard.Project.MVVM.Models.RecipesModel
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
+import retrofit2.http.Url
+import java.net.URL
 
 const val API_KEY = "7e843a8220f14d5ba2891e686e661e9a"
 
@@ -60,4 +62,10 @@ interface DictAPI {
         @Query("maxSugar") maxSugar : String?, // "100"	The maximum amount of sugar in grams the recipe must have.
         @Query("number") value: String
     ) : Response<RecipesModel>
+
+    //отправляем полученный url из функции getRecipesApi, для трансфера объекта через навигационный граф
+    @GET("")
+    suspend fun getByURL(
+        @Url url: String
+    ): Response<RecipesModel>
 }
