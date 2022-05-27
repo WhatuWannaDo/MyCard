@@ -2,16 +2,20 @@ package com.example.mycard.Project.MVVM.View.NavGraph
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.mycard.MainActivity
 import com.example.mycard.Project.MVVM.Models.GroceryModel
 import com.example.mycard.Project.MVVM.View.*
+import com.example.mycard.Project.MVVM.View.Screens.DETAIL_OBJECT_VAlUE
 import com.example.mycard.Project.MVVM.View.Screens.Screens
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -34,8 +38,11 @@ fun SetupNavGraph(navHostController: NavHostController, cardViewModel: CardViewM
         composable(route = Screens.GroceryProductsSearch.route, content = {
             GroceryProductsSearchScreen(navHostController, cardViewModel, obj)
         })
-        composable(route = Screens.RecipesSearch.route, content = {
-            RecipesSearchScreen(navHostController, cardViewModel)
+        composable(route = Screens.RecipesSearch.route, arguments = listOf(navArgument(DETAIL_OBJECT_VAlUE){
+            type = NavType.StringType
+        }), content = {
+            val argument = it.arguments?.getString(DETAIL_OBJECT_VAlUE).toString()
+            RecipesSearchScreen(navHostController, argument)
         })
         composable(route = Screens.RecipesSearchValues.route, content = {
             RecipesValuesScreen(navHostController, cardViewModel, obj)

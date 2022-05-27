@@ -1,5 +1,6 @@
 package com.example.mycard.Project.MVVM.View
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
@@ -16,10 +17,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import com.example.mycard.Project.MVVM.View.Screens.Screens
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
+import org.json.JSONObject
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 @Composable
-fun RecipesSearchScreen(navController: NavController, cardViewModel: CardViewModel){
-
+fun RecipesSearchScreen(navController: NavController, responseObject : String){
+    val urlDecodedObject = URLDecoder.decode(responseObject, StandardCharsets.UTF_8.toString())
+    Log.e("argument", urlDecodedObject)
+    //TODO: как то спарсить нужные значения из строки
     Scaffold(topBar = { TopAppBarRecipes(navController = navController) }) {
     }
 }

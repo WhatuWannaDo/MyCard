@@ -21,11 +21,13 @@ import com.example.mycard.MainActivity
 import com.example.mycard.Project.MVVM.View.Screens.Screens
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
 import com.example.mycard.Project.Network.API_KEY
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun RecipesValuesScreen(navController: NavController, cardViewModel: CardViewModel, obj : MainActivity){
     Scaffold(topBar = { TopAppBarRecipesValues(navController = navController) }) {
-        EditTexts(cardViewModel, obj)
+        EditTexts(cardViewModel, obj, navController)
     }
 }
 
@@ -50,7 +52,7 @@ fun TopAppBarRecipesValues(navController: NavController){
 }
 
 @Composable
-fun EditTexts(viewModel: CardViewModel, obj : MainActivity){
+fun EditTexts(viewModel: CardViewModel, obj : MainActivity, navController: NavController){
 
     var text : String by remember { mutableStateOf("") }
     var cuisine : String by remember { mutableStateOf("") }
@@ -150,7 +152,6 @@ fun EditTexts(viewModel: CardViewModel, obj : MainActivity){
                 Switch(checked = addRecipeInformation, onCheckedChange = {addRecipeInformation = it})
                 Text(text = "Recipe Info")
             }
-
             Button(onClick = {
                 try {
                     viewModel.getRecipesApi(
@@ -182,18 +183,16 @@ fun EditTexts(viewModel: CardViewModel, obj : MainActivity){
 
                     viewModel.recipesResponse.observe(obj, Observer {
                         if(it.isSuccessful){
-                            Log.e("Response", it.body().toString())
+                            val encodedObject = URLEncoder.encode(it.body().toString(), StandardCharsets.UTF_8.toString())
+                            navController.navigate(route = Screens.RecipesSearch.passObject(encodedObject))
                         }
                     })
                 }catch (exception : Exception){
-                    Log.e("Response", "CANT_FETCH_DATA")
+                    Log.e(exception.toString(), "CANT_FETCH_DATA")
                 }
             }) {
                 Text(text = "Search")
             }
         }
     }
-}
-fun nullReturn(): Unit? {
-    return null
 }
