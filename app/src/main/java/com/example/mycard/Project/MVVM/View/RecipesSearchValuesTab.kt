@@ -1,22 +1,31 @@
 package com.example.mycard.Project.MVVM.View
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
+import com.example.mycard.MainActivity
 import com.example.mycard.Project.MVVM.View.Screens.Screens
+import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
+import com.example.mycard.Project.Network.API_KEY
 
 @Composable
-fun RecipesValuesScreen(navController: NavController){
+fun RecipesValuesScreen(navController: NavController, cardViewModel: CardViewModel, obj : MainActivity){
     Scaffold(topBar = { TopAppBarRecipesValues(navController = navController) }) {
+        EditTexts(cardViewModel, obj)
     }
 }
 
@@ -38,4 +47,148 @@ fun TopAppBarRecipesValues(navController: NavController){
 
     }
 
+}
+
+@Composable
+fun EditTexts(viewModel: CardViewModel, obj : MainActivity){
+
+    var text : String by remember { mutableStateOf("") }
+    var cuisine : String by remember { mutableStateOf("") }
+    var diet : String by remember { mutableStateOf("") }
+    var intolerances : String by remember { mutableStateOf("") }
+    var equipment : String by remember { mutableStateOf("") }
+    var includeIngredients : String by remember { mutableStateOf("") }
+    var excludeIngredients : String by remember { mutableStateOf("") }
+    var type : String by remember { mutableStateOf("") }
+    var instructionsRequired : Boolean by remember { mutableStateOf(false) }
+    var addRecipeInformation : Boolean by remember { mutableStateOf(false) }
+    var titleMatch : String by remember { mutableStateOf("") }
+    var maxReadyTime : String by remember { mutableStateOf("") }
+    var minCarbs : String by remember { mutableStateOf("") }
+    var maxCarbs : String by remember { mutableStateOf("") }
+    var minProtein : String by remember { mutableStateOf("") }
+    var maxProtein : String by remember { mutableStateOf("") }
+    var minCalories : String by remember { mutableStateOf("") }
+    var maxCalories : String by remember { mutableStateOf("") }
+    var minFat : String by remember { mutableStateOf("") }
+    var maxFat : String by remember { mutableStateOf("") }
+    var minSugar : String by remember { mutableStateOf("") }
+    var maxSugar : String by remember { mutableStateOf("") }
+
+    Box(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(vertical = 20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            OutlinedTextField(value =  text, onValueChange = {
+                text = it
+            }, label = { Text(text = "Name")})
+            OutlinedTextField(value =  cuisine, onValueChange = {
+                cuisine = it
+            }, label = { Text(text = "Cuisine")})
+            OutlinedTextField(value =  diet, onValueChange = {
+                diet = it
+            }, label = { Text(text = "Diet")})
+            OutlinedTextField(value =  intolerances, onValueChange = {
+                intolerances = it
+            }, label = { Text(text = "Intolerances")})
+            OutlinedTextField(value =  equipment, onValueChange = {
+                equipment = it
+            }, label = { Text(text = "Equipment")})
+            OutlinedTextField(value =  includeIngredients, onValueChange = {
+                includeIngredients = it
+            }, label = { Text(text = "Include ingredients")})
+            OutlinedTextField(value =  excludeIngredients, onValueChange = {
+                excludeIngredients = it
+            }, label = { Text(text = "Exclude Ingredients")})
+            OutlinedTextField(value =  type, onValueChange = {
+                type = it
+            }, label = { Text(text = "Type")})
+            OutlinedTextField(value =  titleMatch, onValueChange = {
+                titleMatch = it
+            }, label = { Text(text = "Title match")})
+            OutlinedTextField(value =  maxReadyTime, onValueChange = {
+                maxReadyTime = it
+            }, label = { Text(text = "Ready time")})
+            OutlinedTextField(value =  minCarbs, onValueChange = {
+                minCarbs = it
+            }, label = { Text(text = "Min Carbs")})
+            OutlinedTextField(value =  maxCarbs, onValueChange = {
+                maxCarbs = it
+            }, label = { Text(text = "Max Carbs")})
+            OutlinedTextField(value =  minProtein, onValueChange = {
+                minProtein = it
+            }, label = { Text(text = "Min Protein")})
+            OutlinedTextField(value =  maxProtein, onValueChange = {
+                maxProtein = it
+            }, label = { Text(text = "Max Protein")})
+            OutlinedTextField(value =  minCalories, onValueChange = {
+                minCalories = it
+            }, label = { Text(text = "Min Calories")})
+            OutlinedTextField(value =  maxCalories, onValueChange = {
+                maxCalories = it
+            }, label = { Text(text = "Max Calories")})
+            OutlinedTextField(value =  minFat, onValueChange = {
+                minFat = it
+            }, label = { Text(text = "Min Fat")})
+            OutlinedTextField(value =  maxFat, onValueChange = {
+                maxFat = it
+            }, label = { Text(text = "Max Fat")})
+            OutlinedTextField(value =  minSugar, onValueChange = {
+                minSugar = it
+            }, label = { Text(text = "Min Sugar")})
+            OutlinedTextField(value =  maxSugar, onValueChange = {
+                maxSugar = it
+            }, label = { Text(text = "Max Sugar")})
+
+            Row(Modifier.padding(vertical = 10.dp)) {
+                Switch(checked = instructionsRequired, onCheckedChange = {instructionsRequired = it})
+                Text(text = "Instructions")
+                Switch(checked = addRecipeInformation, onCheckedChange = {addRecipeInformation = it})
+                Text(text = "Recipe Info")
+            }
+
+            Button(onClick = {
+                try {
+                    viewModel.getRecipesApi(
+                        API_KEY,
+                        text,
+                        cuisine,
+                        diet,
+                        intolerances,
+                        equipment,
+                        includeIngredients,
+                        excludeIngredients,
+                        type,
+                        instructionsRequired,
+                        addRecipeInformation,
+                        titleMatch,
+                        maxReadyTime,
+                        minCarbs,
+                        maxCarbs,
+                        minProtein,
+                        maxProtein,
+                        minCalories,
+                        maxCalories,
+                        minFat,
+                        maxFat,
+                        minSugar,
+                        maxSugar,
+                        "5"
+                    )
+
+                    viewModel.recipesResponse.observe(obj, Observer {
+                        Log.e("Response", it.body().toString())
+                    })
+                }catch (exception : Exception){
+                    Log.e("Response", "CANT_FETCH_DATA")
+                }
+            }) {
+                Text(text = "Search")
+            }
+        }
+    }
 }

@@ -35,10 +35,10 @@ fun SetupNavGraph(navHostController: NavHostController, cardViewModel: CardViewM
             GroceryProductsSearchScreen(navHostController, cardViewModel, obj)
         })
         composable(route = Screens.RecipesSearch.route, content = {
-            RecipesSearchScreen(navHostController)
+            RecipesSearchScreen(navHostController, cardViewModel)
         })
         composable(route = Screens.RecipesSearchValues.route, content = {
-            RecipesValuesScreen(navHostController)
+            RecipesValuesScreen(navHostController, cardViewModel, obj)
         })
     }
 }

@@ -15,9 +15,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import com.example.mycard.Project.MVVM.View.Screens.Screens
+import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
 
 @Composable
-fun RecipesSearchScreen(navController: NavController){
+fun RecipesSearchScreen(navController: NavController, cardViewModel: CardViewModel){
+
     Scaffold(topBar = { TopAppBarRecipes(navController = navController) }) {
     }
 }

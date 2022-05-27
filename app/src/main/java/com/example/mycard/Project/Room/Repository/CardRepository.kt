@@ -1,9 +1,6 @@
 package com.example.mycard.Project.Room.Repository
 
-import com.example.mycard.Project.MVVM.Models.CardModel
-import com.example.mycard.Project.MVVM.Models.GroceryModel
-import com.example.mycard.Project.MVVM.Models.HeadModel
-import com.example.mycard.Project.MVVM.Models.MenuItemsModel
+import com.example.mycard.Project.MVVM.Models.*
 import com.example.mycard.Project.Network.DictApiObject
 import com.example.mycard.Project.Room.Data.DAO.CardDAO
 import kotlinx.coroutines.flow.Flow
@@ -33,5 +30,59 @@ class CardRepository(private val cardDAO: CardDAO) {
 
     suspend fun getMenuItemsFromApi(apiKey : String, text : String, value:String) : Response<MenuItemsModel>{
         return DictApiObject.api.getMenuItemsApi(apiKey, text, value)
+    }
+
+    suspend fun getRecipesFromApi(
+        apiKey : String,
+        text : String,
+        cuisine : String,
+        diet : String,
+        intolerances : String,
+        equipment : String,
+        includeIngredients : String,
+        excludeIngredients : String,
+        type : String,
+        instructionsRequired : Boolean,
+        addRecipeInformation : Boolean,
+        titleMatch : String,
+        maxReadyTime : String,
+        minCarbs : String,
+        maxCarbs : String,
+        minProtein : String,
+        maxProtein : String,
+        minCalories : String,
+        maxCalories : String,
+        minFat : String,
+        maxFat : String,
+        minSugar : String,
+        maxSugar : String,
+        value : String
+        ) : Response<RecipesModel>{
+        return DictApiObject.api.getRecipesApi(
+            apiKey,
+            text,
+            cuisine,
+            diet,
+            intolerances,
+            equipment,
+            includeIngredients,
+            excludeIngredients,
+            type,
+            instructionsRequired,
+            addRecipeInformation,
+            titleMatch,
+            maxReadyTime,
+            minCarbs,
+            maxCarbs,
+            minProtein,
+            maxProtein,
+            minCalories,
+            maxCalories,
+            minFat,
+            maxFat,
+            minSugar,
+            maxSugar,
+            value
+        )
     }
 }
