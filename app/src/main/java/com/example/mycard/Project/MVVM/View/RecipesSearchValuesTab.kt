@@ -86,7 +86,7 @@ fun EditTexts(viewModel: CardViewModel, obj : MainActivity){
             OutlinedTextField(value =  text, onValueChange = {
                 text = it
             }, label = { Text(text = "Name")})
-            OutlinedTextField(value =  cuisine, onValueChange = {
+            OutlinedTextField(value = cuisine, onValueChange = {
                 cuisine = it
             }, label = { Text(text = "Cuisine")})
             OutlinedTextField(value =  diet, onValueChange = {
@@ -140,7 +140,7 @@ fun EditTexts(viewModel: CardViewModel, obj : MainActivity){
             OutlinedTextField(value =  minSugar, onValueChange = {
                 minSugar = it
             }, label = { Text(text = "Min Sugar")})
-            OutlinedTextField(value =  maxSugar, onValueChange = {
+            OutlinedTextField(value = maxSugar, onValueChange = {
                 maxSugar = it
             }, label = { Text(text = "Max Sugar")})
 
@@ -156,32 +156,34 @@ fun EditTexts(viewModel: CardViewModel, obj : MainActivity){
                     viewModel.getRecipesApi(
                         API_KEY,
                         text,
-                        cuisine,
-                        diet,
-                        intolerances,
-                        equipment,
-                        includeIngredients,
-                        excludeIngredients,
-                        type,
+                        (if(cuisine.isEmpty()) null else cuisine),
+                        (if(diet.isEmpty()) null else diet),
+                        (if(intolerances.isEmpty()) null else intolerances),
+                        (if(equipment.isEmpty()) null else equipment),
+                        (if(includeIngredients.isEmpty()) null else includeIngredients),
+                        (if(excludeIngredients.isEmpty()) null else excludeIngredients),
+                        (if(type.isEmpty()) null else type),
                         instructionsRequired,
                         addRecipeInformation,
-                        titleMatch,
-                        maxReadyTime,
-                        minCarbs,
-                        maxCarbs,
-                        minProtein,
-                        maxProtein,
-                        minCalories,
-                        maxCalories,
-                        minFat,
-                        maxFat,
-                        minSugar,
-                        maxSugar,
+                        (if(titleMatch.isEmpty()) null else titleMatch),
+                        (if(maxReadyTime.isEmpty()) null else maxReadyTime),
+                        (if(minCarbs.isEmpty()) null else minCarbs),
+                        (if(maxCarbs.isEmpty()) null else maxCarbs),
+                        (if(minProtein.isEmpty()) null else minProtein),
+                        (if(maxProtein.isEmpty()) null else maxProtein),
+                        (if(minCalories.isEmpty()) null else minCalories),
+                        (if(maxCalories.isEmpty()) null else maxCalories),
+                        (if(minFat.isEmpty()) null else minFat),
+                        (if(maxFat.isEmpty()) null else maxFat),
+                        (if(minSugar.isEmpty()) null else minSugar),
+                        (if(maxSugar.isEmpty()) null else maxSugar),
                         "5"
                     )
 
                     viewModel.recipesResponse.observe(obj, Observer {
-                        Log.e("Response", it.body().toString())
+                        if(it.isSuccessful){
+                            Log.e("Response", it.body().toString())
+                        }
                     })
                 }catch (exception : Exception){
                     Log.e("Response", "CANT_FETCH_DATA")
@@ -191,4 +193,7 @@ fun EditTexts(viewModel: CardViewModel, obj : MainActivity){
             }
         }
     }
+}
+fun nullReturn(): Unit? {
+    return null
 }

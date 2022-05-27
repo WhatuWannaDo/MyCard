@@ -8,13 +8,16 @@ data class ResultInfo(
     val title : String,
     val image : String,
     val imageType : String,
-    val nutrition : List<NutritionInfo>,
+    val nutrition : Nutrients,
     val offset : Int,
     val number : Int,
     val totalResults : Int
 )
+data class Nutrients(
+    val nutrients : List<NutritionInfo>
+)
 data class NutritionInfo(
     val name : String,
-    val amount : Int,
+    val amount : Double,
     val unit : String
 )

@@ -37,27 +37,27 @@ interface DictAPI {
     suspend fun getRecipesApi(
         @Query("apiKey") apiKey: String,
         @Query("query") query : String,
-        @Query("cuisine") cuisine : String, // The cuisine(s) of the recipes. One or more, comma separated (will be interpreted as 'OR'). https://spoonacular.com/food-api/docs#Cuisines
-        @Query("diet") diet : String, // The diet for which the recipes must be suitable. https://spoonacular.com/food-api/docs#Diets
-        @Query("intolerances") intolerances : String, // A comma-separated list of intolerances. All recipes returned must not contain ingredients that are not suitable for people with the intolerances entered.
-        @Query("equipment") equipment : String, // The equipment required. Multiple values will be interpreted as 'or'. For example, value could be "blender, frying pan, bowl".
-        @Query("includeIngredients") includeIngredients : String, // A comma-separated list of ingredients that should/must be used in the recipes.
-        @Query("excludeIngredients") excludeIngredients : String, // A comma-separated list of ingredients or ingredient types that the recipes must not contain.
-        @Query("type") type : String, // https://spoonacular.com/food-api/docs#Meal-Types
+        @Query("cuisine") cuisine : String?, // The cuisine(s) of the recipes. One or more, comma separated (will be interpreted as 'OR'). https://spoonacular.com/food-api/docs#Cuisines
+        @Query("diet") diet : String?, // The diet for which the recipes must be suitable. https://spoonacular.com/food-api/docs#Diets
+        @Query("intolerances") intolerances : String?, // A comma-separated list of intolerances. All recipes returned must not contain ingredients that are not suitable for people with the intolerances entered.
+        @Query("equipment") equipment : String?, // The equipment required. Multiple values will be interpreted as 'or'. For example, value could be "blender, frying pan, bowl".
+        @Query("includeIngredients") includeIngredients : String?, // A comma-separated list of ingredients that should/must be used in the recipes.
+        @Query("excludeIngredients") excludeIngredients : String?, // A comma-separated list of ingredients or ingredient types that the recipes must not contain.
+        @Query("type") type : String?, // https://spoonacular.com/food-api/docs#Meal-Types
         @Query("instructionsRequired") instructionsRequired : Boolean, // Whether the recipes must have instructions.
         @Query("addRecipeInformation") addRecipeInformation : Boolean, // If set to true, you get more information about the recipes returned.
-        @Query("titleMatch") titleMatch : String, // Enter text that must be found in the title of the recipes.
-        @Query("maxReadyTime") maxReadyTime : String, // The maximum time in minutes it should take to prepare and cook the recipe.
-        @Query("minCarbs") minCarbs : String, // "10"	The minimum amount of carbohydrates in grams the recipe must have.
-        @Query("maxCarbs") maxCarbs : String, // "100"	The maximum amount of carbohydrates in grams the recipe can have.
-        @Query("minProtein") minProtein : String, // "10"	The minimum amount of protein in grams the recipe must have.
-        @Query("maxProtein") maxProtein : String, // "100"	The maximum amount of protein in grams the recipe can have.
-        @Query("minCalories") minCalories : String, // "50"	The minimum amount of calories the recipe must have.
-        @Query("maxCalories") maxCalories : String, // "800"	The maximum amount of calories the recipe can have.
-        @Query("minFat") minFat : String, // "1"	The minimum amount of fat in grams the recipe must have.
-        @Query("maxFat") maxFat : String, // "100"	The maximum amount of fat in grams the recipe can have.
-        @Query("minSugar") minSugar : String, // "0"	TThe minimum amount of sugar in grams the recipe must have.
-        @Query("maxSugar") maxSugar : String, // "100"	The maximum amount of sugar in grams the recipe must have.
+        @Query("titleMatch") titleMatch : String?, // Enter text that must be found in the title of the recipes.
+        @Query("maxReadyTime") maxReadyTime : String?, // The maximum time in minutes it should take to prepare and cook the recipe.
+        @Query("minCarbs") minCarbs : String?, // "10"	The minimum amount of carbohydrates in grams the recipe must have.
+        @Query("maxCarbs") maxCarbs : String?, // "100"	The maximum amount of carbohydrates in grams the recipe can have.
+        @Query("minProtein") minProtein : String?, // "10"	The minimum amount of protein in grams the recipe must have.
+        @Query("maxProtein") maxProtein : String?, // "100"	The maximum amount of protein in grams the recipe can have.
+        @Query("minCalories") minCalories : String?, // "50"	The minimum amount of calories the recipe must have.
+        @Query("maxCalories") maxCalories : String?, // "800"	The maximum amount of calories the recipe can have.
+        @Query("minFat") minFat : String?, // "1"	The minimum amount of fat in grams the recipe must have.
+        @Query("maxFat") maxFat : String?, // "100"	The maximum amount of fat in grams the recipe can have.
+        @Query("minSugar") minSugar : String?, // "0"	TThe minimum amount of sugar in grams the recipe must have.
+        @Query("maxSugar") maxSugar : String?, // "100"	The maximum amount of sugar in grams the recipe must have.
         @Query("number") value: String
     ) : Response<RecipesModel>
 }
