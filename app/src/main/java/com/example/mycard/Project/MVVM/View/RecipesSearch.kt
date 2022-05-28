@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -62,10 +63,11 @@ fun TopAppBarRecipes(navController: NavController, viewModel: CardViewModel){
 
 }
 
-@SuppressLint("CommitPrefEdits")
+@SuppressLint("CommitPrefEdits", "UnrememberedMutableState")
 @ExperimentalMaterialApi
 @Composable
 fun CustomLazyColumnRecipesItem(viewModel: CardViewModel, obj : MainActivity) {
+    val recompositionState = mutableStateOf(0) //increased automatically for recomposition (should be removed and changed for smth else!!!)
 
     val backgroundMode : Color
     if (isSystemInDarkTheme()){
@@ -75,6 +77,8 @@ fun CustomLazyColumnRecipesItem(viewModel: CardViewModel, obj : MainActivity) {
     }
     LazyColumn(contentPadding = PaddingValues(vertical = 10.dp, horizontal = 5.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         viewModel.urlResponse.observe(obj, Observer {response ->
+            recompositionState.value += 1
+            Log.e("Test", recompositionState.toString())
             if(response.isSuccessful) {
                 items(response.body()?.results!!){
                     ListItem(
