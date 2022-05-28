@@ -153,13 +153,14 @@ fun EditTexts(viewModel: CardViewModel, obj : MainActivity, navController: NavCo
             OutlinedTextField(value = maxSugar, onValueChange = {
                 maxSugar = it
             }, label = { Text(text = "Max Sugar")})
-
+/*
+would be added soon
             Row(Modifier.padding(vertical = 10.dp)) {
                 Switch(checked = instructionsRequired, onCheckedChange = {instructionsRequired = it})
                 Text(text = "Instructions")
                 Switch(checked = addRecipeInformation, onCheckedChange = {addRecipeInformation = it})
                 Text(text = "Recipe Info")
-            }
+            }*/
             Button(onClick = {
                 try {
                     viewModel.getRecipesApi(
@@ -172,8 +173,8 @@ fun EditTexts(viewModel: CardViewModel, obj : MainActivity, navController: NavCo
                         (if(includeIngredients.isEmpty()) null else includeIngredients),
                         (if(excludeIngredients.isEmpty()) null else excludeIngredients),
                         (if(type.isEmpty()) null else type),
-                        instructionsRequired,
-                        addRecipeInformation,
+                        //instructionsRequired,
+                        //addRecipeInformation,
                         (if(titleMatch.isEmpty()) null else titleMatch),
                         (if(maxReadyTime.isEmpty()) null else maxReadyTime),
                         (if(minCarbs.isEmpty()) null else minCarbs),

@@ -35,6 +35,7 @@ fun RecipesSearchScreen(navController: NavController, responseObject : String, v
     //decode received url and call the method which will call this url to api again
     val urlDecodedObject = URLDecoder.decode(responseObject, StandardCharsets.UTF_8.toString())
     viewModel.getByURL(urlDecodedObject)
+    Log.e("test", urlDecodedObject)
     Scaffold(topBar = { TopAppBarRecipes(navController = navController, viewModel) }) {
         CustomLazyColumnRecipesItem(viewModel = viewModel, obj = obj)
     }
@@ -54,7 +55,6 @@ fun TopAppBarRecipes(navController: NavController, viewModel: CardViewModel){
         Spacer(Modifier.weight(1f, true))
         Icon(imageVector = Icons.Default.Search, contentDescription = "Search Recipes", tint = iconMode, modifier = Modifier.clickable {
             navController.navigate(Screens.RecipesSearchValues.route)
-            viewModel.getByURL("") // for update lazy column into null values
         })
         Button(onClick = { navController.navigate(route = Screens.Settings.route) }, colors = ButtonDefaults.buttonColors(backgroundColor = buttonMode)) {
             Icon(imageVector = Icons.Default.Settings, contentDescription = "SettingsRecipes", tint = iconMode)
@@ -78,7 +78,6 @@ fun CustomLazyColumnRecipesItem(viewModel: CardViewModel, obj : MainActivity) {
     LazyColumn(contentPadding = PaddingValues(vertical = 10.dp, horizontal = 5.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         viewModel.urlResponse.observe(obj, Observer {response ->
             recompositionState.value += 1
-            Log.e("Test", recompositionState.toString())
             if(response.isSuccessful) {
                 items(response.body()?.results!!){
                     ListItem(
