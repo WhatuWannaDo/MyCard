@@ -1,5 +1,6 @@
 package com.example.mycard.Project.MVVM.View
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -21,13 +22,19 @@ import com.example.mycard.MainActivity
 import com.example.mycard.Project.MVVM.View.Screens.Screens
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
 import com.example.mycard.Project.Network.API_KEY
+import kotlinx.coroutines.*
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
+@SuppressLint("UnrememberedMutableState")
+@DelicateCoroutinesApi
 @Composable
 fun RecipesValuesScreen(navController: NavController, cardViewModel: CardViewModel, obj : MainActivity){
+    val progressState = mutableStateOf(false)
+
     Scaffold(topBar = { TopAppBarRecipesValues(navController = navController) }) {
-        EditTexts(cardViewModel, obj, navController)
+        EditTexts(cardViewModel, obj, navController, progressState)
+        ProgressBarCircular(progressState = progressState, delayInMillis = 5000)
     }
 }
 
@@ -51,8 +58,9 @@ fun TopAppBarRecipesValues(navController: NavController){
 
 }
 
+@DelicateCoroutinesApi
 @Composable
-fun EditTexts(viewModel: CardViewModel, obj : MainActivity, navController: NavController){
+fun EditTexts(viewModel: CardViewModel, obj : MainActivity, navController: NavController, progressState : MutableState<Boolean>){
 
     var text : String by remember { mutableStateOf("") }
     var cuisine : String by remember { mutableStateOf("") }
@@ -183,9 +191,14 @@ fun EditTexts(viewModel: CardViewModel, obj : MainActivity, navController: NavCo
 
                     viewModel.recipesResponse.observe(obj, Observer {
                         if(it.isSuccessful){
-                            //получаем ссылку из полученного объекта и отправляем её в через навигацию
+                            progressState.value = true
+                            //receive url from received object and send it by navigation
                             val encodedObject = URLEncoder.encode(it.raw().request.url.toString(), StandardCharsets.UTF_8.toString())
-                            navController.navigate(route = Screens.RecipesSearch.passObject(encodedObject))
+                            GlobalScope.launch(Dispatchers.Main) {
+                                delay(5000)
+                                navController.navigate(route = Screens.RecipesSearch.passObject(encodedObject))
+
+                            }
                         }
                     })
                 }catch (exception : Exception){
@@ -197,3 +210,6 @@ fun EditTexts(viewModel: CardViewModel, obj : MainActivity, navController: NavCo
         }
     }
 }
+
+
+

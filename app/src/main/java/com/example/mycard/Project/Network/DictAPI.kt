@@ -10,7 +10,7 @@ import retrofit2.http.Query
 import retrofit2.http.Url
 import java.net.URL
 
-const val API_KEY = "7e843a8220f14d5ba2891e686e661e9a"
+const val API_KEY = "e86726a441b243d1b05e5203a81d7b7c"
 
 interface DictAPI {
 
@@ -63,7 +63,7 @@ interface DictAPI {
         @Query("number") value: String
     ) : Response<RecipesModel>
 
-    //отправляем полученный url из функции getRecipesApi, для трансфера объекта через навигационный граф
+    //sending received url which one received from getRecipesApi func, for transfer object in navigation
     @GET("")
     suspend fun getByURL(
         @Url url: String

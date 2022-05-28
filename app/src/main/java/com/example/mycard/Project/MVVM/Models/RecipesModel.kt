@@ -8,7 +8,7 @@ data class ResultInfo(
     val title : String,
     val image : String,
     val imageType : String,
-    val nutrition : Nutrients,
+    val nutrition : Nutrients?,
     val offset : Int,
     val number : Int,
     val totalResults : Int

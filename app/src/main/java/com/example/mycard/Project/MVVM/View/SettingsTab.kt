@@ -36,7 +36,7 @@ fun SettingsTab(navController: NavController, obj : MainActivity){
 
     Scaffold(topBar = { TopAppBarSettings(navController = navController, obj = obj)}) {
         ColumnSettings(sharedPrefs = sharedPrefs, progressState = progressState, obj)
-        ProgressBarCircular(progressState = progressState)
+        ProgressBarCircular(progressState = progressState, delayInMillis = 2000)
     }
 
 
@@ -104,7 +104,7 @@ fun ColumnSettings(sharedPrefs : SharedPreferences, progressState : MutableState
 @DelicateCoroutinesApi
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun ProgressBarCircular(progressState : MutableState<Boolean>){
+fun ProgressBarCircular(progressState : MutableState<Boolean>, delayInMillis : Long){
     //progress bar creating after choosing some radio button. Thats need for time to write shared prefs into a memory
     if(progressState.value){
         Column(
@@ -113,7 +113,7 @@ fun ProgressBarCircular(progressState : MutableState<Boolean>){
                 .padding(vertical = 20.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Bottom) {
             CircularProgressIndicator()
             GlobalScope.launch(Dispatchers.Default) {
-                delay(2000)
+                delay(delayInMillis)
                 progressState.value = false
             }
         }
