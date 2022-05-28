@@ -8,9 +8,8 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.http.Url
-import java.net.URL
 
-const val API_KEY = "e86726a441b243d1b05e5203a81d7b7c"
+const val API_KEY = "7377e37c37cd401d88e8490ca14d1ad9"
 
 interface DictAPI {
 

@@ -1,10 +1,8 @@
 package com.example.mycard.Project.MVVM.View
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -21,35 +19,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.PopupProperties
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.mycard.MainActivity
 import com.example.mycard.Project.MVVM.Models.CardModel
 import com.example.mycard.Project.MVVM.View.Screens.Screens
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
 import com.example.mycard.Project.Network.API_KEY
-import com.example.mycard.Project.Room.Repository.CardRepository
-import com.example.mycard.ui.theme.Purple200
-import com.example.mycard.ui.theme.Purple700
-import com.example.mycard.ui.theme.Shapes
 import kotlinx.coroutines.*
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
-import kotlin.coroutines.coroutineContext
 
 @DelicateCoroutinesApi
 @SuppressLint("UnrememberedMutableState")
@@ -171,17 +156,6 @@ fun CustomLazyColumnItem(list : List<CardModel>, alertDialogDescription : Mutabl
                     trailing = { Text(text = "Amount: " + product.productAmount, fontSize = MaterialTheme.typography.h6.fontSize) },
                 )
             }
-
-/*
-                        Icon(
-                            imageVector = Icons.Default.Favorite,
-                            contentDescription = "Favorite",
-                            Modifier
-                                .padding(horizontal = )
-                                .clickable {
-                                    Log.e("Test", "Added to favorites")
-                                })
- */
         }
     }
 }

@@ -2,18 +2,14 @@ package com.example.mycard.Project.MVVM.View.NavGraph
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.mycard.MainActivity
-import com.example.mycard.Project.MVVM.Models.GroceryModel
 import com.example.mycard.Project.MVVM.View.*
 import com.example.mycard.Project.MVVM.View.Screens.DETAIL_OBJECT_VAlUE
 import com.example.mycard.Project.MVVM.View.Screens.Screens

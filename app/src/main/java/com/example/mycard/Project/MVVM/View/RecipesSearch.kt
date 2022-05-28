@@ -1,7 +1,6 @@
 package com.example.mycard.Project.MVVM.View
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -35,7 +34,6 @@ fun RecipesSearchScreen(navController: NavController, responseObject : String, v
     //decode received url and call the method which will call this url to api again
     val urlDecodedObject = URLDecoder.decode(responseObject, StandardCharsets.UTF_8.toString())
     viewModel.getByURL(urlDecodedObject)
-    Log.e("test", urlDecodedObject)
     Scaffold(topBar = { TopAppBarRecipes(navController = navController, viewModel) }) {
         CustomLazyColumnRecipesItem(viewModel = viewModel, obj = obj)
     }

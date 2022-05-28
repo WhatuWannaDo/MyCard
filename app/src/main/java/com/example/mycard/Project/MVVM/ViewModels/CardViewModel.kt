@@ -8,9 +8,7 @@ import com.example.mycard.Project.Room.Repository.CardRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import retrofit2.Call
 import retrofit2.Response
-import java.net.URL
 
 class CardViewModel(application: Application) : AndroidViewModel(application) {
 

@@ -1,12 +1,9 @@
 package com.example.mycard.Project.MVVM.View
 
 import android.annotation.SuppressLint
-import android.content.SharedPreferences
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,11 +11,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -26,28 +20,36 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import com.example.mycard.MainActivity
-import com.example.mycard.Project.MVVM.Models.CardModel
-import com.example.mycard.Project.MVVM.Models.GroceryModel
 import com.example.mycard.Project.MVVM.View.Screens.Screens
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
 import com.example.mycard.Project.Network.API_KEY
-import me.saket.swipe.SwipeAction
-import me.saket.swipe.SwipeableActionsBox
 
 @ExperimentalMaterialApi
 @Composable
 fun GroceryProductsSearchScreen(navController: NavController, viewModel: CardViewModel, obj: MainActivity){
-    viewModel.getGroceryApi(API_KEY, "choco", "30")
-
+    var searchState : String by remember { mutableStateOf("") }
     Scaffold(topBar = { TopAppBarGrocery(navController = navController) }) {
-        CustomLazyColumnGroceryItem(viewModel, obj)
+        Column() {
+            OutlinedTextField(
+                value = searchState,
+                onValueChange = {
+                    searchState = it
+                    viewModel.getGroceryApi(API_KEY, searchState, "30")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp),
+                label = {Text("Search")},
+                singleLine = true
+            )
+            CustomLazyColumnGroceryItem(viewModel, obj)
+        }
     }
 }
 
 @Composable
 fun TopAppBarGrocery(navController: NavController){
     val buttonMode : Color
-    val iconMode = Color.White
     if (isSystemInDarkTheme()){
         buttonMode = Color(39,39,39)
     }else{
@@ -56,9 +58,7 @@ fun TopAppBarGrocery(navController: NavController){
     TopAppBar(modifier = Modifier.fillMaxWidth()) {
         Text(text = "Grocery", fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.h5.fontSize)
         Spacer(Modifier.weight(1f, true))
-        Icon(imageVector = Icons.Default.Search, contentDescription = "Search Grocery", tint = iconMode, modifier = Modifier.clickable {
-            //TODO: add search tab
-        })
+
         Button(onClick = { navController.navigate(route = Screens.Settings.route) }, colors = ButtonDefaults.buttonColors(backgroundColor = buttonMode)) {
             Icon(imageVector = Icons.Default.Settings, contentDescription = "SettingsGrocery")
         }

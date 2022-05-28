@@ -5,7 +5,6 @@ import com.example.mycard.Project.Network.DictApiObject
 import com.example.mycard.Project.Room.Data.DAO.CardDAO
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
-import java.net.URL
 
 class CardRepository(private val cardDAO: CardDAO) {
     val getAllProducts : Flow<List<CardModel>> = cardDAO.getAllProducts()
