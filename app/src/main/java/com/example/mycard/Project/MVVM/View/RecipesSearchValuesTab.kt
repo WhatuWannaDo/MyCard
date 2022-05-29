@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
@@ -264,13 +266,16 @@ fun EditTexts(viewModel: CardViewModel, obj : MainActivity, navController: NavCo
 
             OutlinedTextField(value =  equipment, onValueChange = {
                 equipment = it
-            }, label = { Text(text = "Equipment")})
+            }, label = { Text(text = "Equipment (example - pan)")})
+
             OutlinedTextField(value =  includeIngredients, onValueChange = {
                 includeIngredients = it
             }, label = { Text(text = "Include ingredients")})
+
             OutlinedTextField(value =  excludeIngredients, onValueChange = {
                 excludeIngredients = it
             }, label = { Text(text = "Exclude Ingredients")})
+
 
             Box {
                 OutlinedTextField(value =  type, onValueChange = {
@@ -301,37 +306,70 @@ fun EditTexts(viewModel: CardViewModel, obj : MainActivity, navController: NavCo
             OutlinedTextField(value =  titleMatch, onValueChange = {
                 titleMatch = it
             }, label = { Text(text = "Title match")})
-            OutlinedTextField(value =  maxReadyTime, onValueChange = {
+
+            OutlinedTextField(value =  maxReadyTime,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                onValueChange = {
                 maxReadyTime = it
             }, label = { Text(text = "Ready time")})
-            OutlinedTextField(value =  minCarbs, onValueChange = {
+
+            OutlinedTextField(value =  minCarbs,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                onValueChange = {
                 minCarbs = it
             }, label = { Text(text = "Min Carbs")})
-            OutlinedTextField(value =  maxCarbs, onValueChange = {
+
+            OutlinedTextField(value =  maxCarbs,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                onValueChange = {
                 maxCarbs = it
             }, label = { Text(text = "Max Carbs")})
-            OutlinedTextField(value =  minProtein, onValueChange = {
+
+            OutlinedTextField(value =  minProtein,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                onValueChange = {
                 minProtein = it
             }, label = { Text(text = "Min Protein")})
-            OutlinedTextField(value =  maxProtein, onValueChange = {
+
+            OutlinedTextField(value =  maxProtein,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                onValueChange = {
                 maxProtein = it
             }, label = { Text(text = "Max Protein")})
-            OutlinedTextField(value =  minCalories, onValueChange = {
+
+            OutlinedTextField(value =  minCalories,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                onValueChange = {
                 minCalories = it
             }, label = { Text(text = "Min Calories")})
-            OutlinedTextField(value =  maxCalories, onValueChange = {
+
+            OutlinedTextField(value =  maxCalories,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                onValueChange = {
                 maxCalories = it
             }, label = { Text(text = "Max Calories")})
-            OutlinedTextField(value =  minFat, onValueChange = {
+
+            OutlinedTextField(value =  minFat,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                onValueChange = {
                 minFat = it
             }, label = { Text(text = "Min Fat")})
-            OutlinedTextField(value =  maxFat, onValueChange = {
+
+            OutlinedTextField(value =  maxFat,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                onValueChange = {
                 maxFat = it
             }, label = { Text(text = "Max Fat")})
-            OutlinedTextField(value =  minSugar, onValueChange = {
+
+            OutlinedTextField(value =  minSugar,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                onValueChange = {
                 minSugar = it
             }, label = { Text(text = "Min Sugar")})
-            OutlinedTextField(value = maxSugar, onValueChange = {
+
+            OutlinedTextField(value = maxSugar,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                onValueChange = {
                 maxSugar = it
             }, label = { Text(text = "Max Sugar")})
 /*
