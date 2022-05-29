@@ -2,6 +2,8 @@ package com.example.mycard.Project.MVVM.View
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -9,12 +11,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import com.example.mycard.MainActivity
@@ -84,6 +90,85 @@ fun EditTexts(viewModel: CardViewModel, obj : MainActivity, navController: NavCo
     var minSugar : String by remember { mutableStateOf("") }
     var maxSugar : String by remember { mutableStateOf("") }
 
+    val dropDownMenuCuisine = listOf(
+        "African",
+        "American",
+        "British",
+        "Cajun",
+        "Caribbean",
+        "Chinese",
+        "Eastern European",
+        "European",
+        "French",
+        "German",
+        "Greek",
+        "Indian",
+        "Irish",
+        "Italian",
+        "Japanese",
+        "Jewish",
+        "Korean",
+        "Latin American",
+        "Mediterranean",
+        "Mexican",
+        "Middle Eastern",
+        "Nordic",
+        "Southern",
+        "Spanish",
+        "Thai",
+        "Vietnamese"
+    )
+    var dropDownMenuCuisineState : Boolean by remember { mutableStateOf(false) }
+
+    val dropDownMenuIntolerances = listOf(
+        "Dairy",
+        "Egg",
+        "Gluten",
+        "Grain",
+        "Peanut",
+        "Seafood",
+        "Sesame",
+        "Shellfish",
+        "Soy",
+        "Sulfite",
+        "Tree Nut",
+        "Wheat"
+    )
+    var dropDownMenuIntolerancesState : Boolean by remember { mutableStateOf(false) }
+
+    val dropDownMenuDiet = listOf(
+        "Gluten Free",
+        "Ketogenic",
+        "Vegetarian",
+        "Lacto-Vegetarian",
+        "Ovo-Vegetarian",
+        "Vegan",
+        "Pescetarian",
+        "Paleo",
+        "Primal",
+        "Low FODMAP",
+        "Whole30"
+    )
+    var dropDownMenuDietState : Boolean by remember { mutableStateOf(false) }
+
+    val dropDownMenuMealTypes = listOf(
+        "Main course",
+        "Side dish",
+        "Dessert",
+        "Appetizer",
+        "Salad",
+        "Bread",
+        "Breakfast",
+        "Soup",
+        "Beverage",
+        "Sauce",
+        "Marinade",
+        "Fingerfood",
+        "Snack",
+        "Drink"
+    )
+    var dropDownMenuMealTypesState : Boolean by remember { mutableStateOf(false) }
+
     Box(
         Modifier
             .fillMaxSize()
@@ -95,15 +180,88 @@ fun EditTexts(viewModel: CardViewModel, obj : MainActivity, navController: NavCo
             OutlinedTextField(value =  text, onValueChange = {
                 text = it
             }, label = { Text(text = "Name")})
-            OutlinedTextField(value = cuisine, onValueChange = {
-                cuisine = it
-            }, label = { Text(text = "Cuisine")})
-            OutlinedTextField(value =  diet, onValueChange = {
-                diet = it
-            }, label = { Text(text = "Diet")})
-            OutlinedTextField(value =  intolerances, onValueChange = {
-                intolerances = it
-            }, label = { Text(text = "Intolerances")})
+
+
+            Box {
+                OutlinedTextField(value = cuisine, onValueChange = {
+                    cuisine = it
+                }, label = { Text(text = "Cuisine")}, readOnly = true, trailingIcon = { Icon(
+                    imageVector = Icons.Default.ArrowDropDown,
+                    contentDescription = "DropDownMenuCuisine",
+                    modifier = Modifier.clickable { dropDownMenuCuisineState = true }
+                )}
+                )
+                DropdownMenu(
+                    expanded = dropDownMenuCuisineState,
+                    offset = DpOffset(x = 70.dp, 0.dp),
+                    modifier = Modifier.size(width = 200.dp,height = 200.dp),
+                    onDismissRequest = { dropDownMenuCuisineState = false }) {
+
+                    dropDownMenuCuisine.forEach { label ->
+                        DropdownMenuItem(onClick = {
+                            cuisine = label
+                            dropDownMenuCuisineState = false
+                        }) {
+                            Text(text = label)
+                        }
+                    }
+                }
+            }
+
+            Box {
+                OutlinedTextField(value =  diet, onValueChange = {
+                    diet = it
+                }, label = { Text(text = "Diet")}, readOnly = true, trailingIcon = { Icon(
+                    imageVector = Icons.Default.ArrowDropDown,
+                    contentDescription = "DropDownMenuDiet",
+                    modifier = Modifier.clickable { dropDownMenuDietState = true }
+                )}
+                )
+                DropdownMenu(
+                    expanded = dropDownMenuDietState,
+                    offset = DpOffset(x = 70.dp, 0.dp),
+                    modifier = Modifier.size(width = 200.dp,height = 200.dp),
+                    onDismissRequest = { dropDownMenuDietState = false }) {
+
+                    dropDownMenuDiet.forEach { label ->
+                        DropdownMenuItem(onClick = {
+                            diet = label
+                            dropDownMenuDietState = false
+                        }) {
+                            Text(text = label)
+                        }
+                    }
+                }
+            }
+
+
+            Box {
+                OutlinedTextField(value =  intolerances, onValueChange = {
+                    intolerances = it
+                }, label = { Text(text = "Intolerances")}, readOnly = true, trailingIcon = { Icon(
+                    imageVector = Icons.Default.ArrowDropDown,
+                    contentDescription = "DropDownMenuIntolerances",
+                    modifier = Modifier.clickable { dropDownMenuIntolerancesState = true }
+                )}
+                )
+                DropdownMenu(
+                    expanded = dropDownMenuIntolerancesState,
+                    offset = DpOffset(x = 70.dp, 0.dp),
+                    modifier = Modifier.size(width = 200.dp,height = 200.dp),
+                    onDismissRequest = { dropDownMenuIntolerancesState = false }) {
+
+                    dropDownMenuIntolerances.forEach { label ->
+                        DropdownMenuItem(onClick = {
+                            intolerances = label
+                            dropDownMenuIntolerancesState = false
+                        }) {
+                            Text(text = label)
+                        }
+                    }
+                }
+            }
+
+
             OutlinedTextField(value =  equipment, onValueChange = {
                 equipment = it
             }, label = { Text(text = "Equipment")})
@@ -113,9 +271,33 @@ fun EditTexts(viewModel: CardViewModel, obj : MainActivity, navController: NavCo
             OutlinedTextField(value =  excludeIngredients, onValueChange = {
                 excludeIngredients = it
             }, label = { Text(text = "Exclude Ingredients")})
-            OutlinedTextField(value =  type, onValueChange = {
-                type = it
-            }, label = { Text(text = "Type")})
+
+            Box {
+                OutlinedTextField(value =  type, onValueChange = {
+                    type = it
+                }, label = { Text(text = "Type")}, readOnly = true, trailingIcon = { Icon(
+                    imageVector = Icons.Default.ArrowDropDown,
+                    contentDescription = "DropDownMenuMealType",
+                    modifier = Modifier.clickable { dropDownMenuMealTypesState = true }
+                )})
+                DropdownMenu(
+                    expanded = dropDownMenuMealTypesState,
+                    offset = DpOffset(x = 70.dp, 0.dp),
+                    modifier = Modifier.size(width = 200.dp,height = 200.dp),
+                    onDismissRequest = { dropDownMenuMealTypesState = false }) {
+
+                    dropDownMenuMealTypes.forEach { label ->
+                        DropdownMenuItem(onClick = {
+                            type = label
+                            dropDownMenuMealTypesState = false
+                        }) {
+                            Text(text = label)
+                        }
+                    }
+                }
+            }
+
+
             OutlinedTextField(value =  titleMatch, onValueChange = {
                 titleMatch = it
             }, label = { Text(text = "Title match")})
@@ -162,45 +344,50 @@ would be added soon
             }*/
             Button(onClick = {
                 try {
-                    viewModel.getRecipesApi(
-                        API_KEY,
-                        text,
-                        (if(cuisine.isEmpty()) null else cuisine),
-                        (if(diet.isEmpty()) null else diet),
-                        (if(intolerances.isEmpty()) null else intolerances),
-                        (if(equipment.isEmpty()) null else equipment),
-                        (if(includeIngredients.isEmpty()) null else includeIngredients),
-                        (if(excludeIngredients.isEmpty()) null else excludeIngredients),
-                        (if(type.isEmpty()) null else type),
-                        //instructionsRequired,
-                        //addRecipeInformation,
-                        (if(titleMatch.isEmpty()) null else titleMatch),
-                        (if(maxReadyTime.isEmpty()) null else maxReadyTime),
-                        (if(minCarbs.isEmpty()) null else minCarbs),
-                        (if(maxCarbs.isEmpty()) null else maxCarbs),
-                        (if(minProtein.isEmpty()) null else minProtein),
-                        (if(maxProtein.isEmpty()) null else maxProtein),
-                        (if(minCalories.isEmpty()) null else minCalories),
-                        (if(maxCalories.isEmpty()) null else maxCalories),
-                        (if(minFat.isEmpty()) null else minFat),
-                        (if(maxFat.isEmpty()) null else maxFat),
-                        (if(minSugar.isEmpty()) null else minSugar),
-                        (if(maxSugar.isEmpty()) null else maxSugar),
-                        "5"
-                    )
+                    if(text.isNullOrEmpty()){
+                        Toast.makeText(obj, "Fill the name field!", Toast.LENGTH_SHORT).show()
+                    }else{
 
-                    viewModel.recipesResponse.observe(obj, Observer {
-                        if(it.isSuccessful){
-                            progressState.value = true
-                            //receive url from received object and send it by navigation
-                            val encodedObject = URLEncoder.encode(it.raw().request.url.toString(), StandardCharsets.UTF_8.toString())
-                            GlobalScope.launch(Dispatchers.Main) {
-                                delay(5000)
-                                navController.navigate(route = Screens.RecipesSearch.passObject(encodedObject))
+                        viewModel.getRecipesApi(
+                            API_KEY,
+                            text,
+                            (if(cuisine.isEmpty()) null else cuisine),
+                            (if(diet.isEmpty()) null else diet),
+                            (if(intolerances.isEmpty()) null else intolerances),
+                            (if(equipment.isEmpty()) null else equipment),
+                            (if(includeIngredients.isEmpty()) null else includeIngredients),
+                            (if(excludeIngredients.isEmpty()) null else excludeIngredients),
+                            (if(type.isEmpty()) null else type),
+                            //instructionsRequired,
+                            //addRecipeInformation,
+                            (if(titleMatch.isEmpty()) null else titleMatch),
+                            (if(maxReadyTime.isEmpty()) null else maxReadyTime),
+                            (if(minCarbs.isEmpty()) null else minCarbs),
+                            (if(maxCarbs.isEmpty()) null else maxCarbs),
+                            (if(minProtein.isEmpty()) null else minProtein),
+                            (if(maxProtein.isEmpty()) null else maxProtein),
+                            (if(minCalories.isEmpty()) null else minCalories),
+                            (if(maxCalories.isEmpty()) null else maxCalories),
+                            (if(minFat.isEmpty()) null else minFat),
+                            (if(maxFat.isEmpty()) null else maxFat),
+                            (if(minSugar.isEmpty()) null else minSugar),
+                            (if(maxSugar.isEmpty()) null else maxSugar),
+                            "5"
+                        )
 
+                        viewModel.recipesResponse.observe(obj, Observer {
+                            if(it.isSuccessful){
+                                progressState.value = true
+                                //receive url from received object and send it by navigation
+                                val encodedObject = URLEncoder.encode(it.raw().request.url.toString(), StandardCharsets.UTF_8.toString())
+                                GlobalScope.launch(Dispatchers.Main) {
+                                    delay(5000)
+                                    navController.navigate(route = Screens.RecipesSearch.passObject(encodedObject))
+
+                                }
                             }
-                        }
-                    })
+                        })
+                    }
                 }catch (exception : Exception){
                     Log.e(exception.toString(), "CANT_FETCH_DATA")
                 }
