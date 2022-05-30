@@ -19,7 +19,4 @@ interface FavoriteRecipesDAO {
     @Delete
     fun deleteFromFavoriteRecipes(recipe: FavoriteRecipesModel)
 
-    @Transaction
-    @Query("DELETE FROM favorite_recipes")
-    fun deleteAllFromFavoriteRecipes()
 }

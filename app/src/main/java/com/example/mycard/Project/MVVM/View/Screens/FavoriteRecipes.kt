@@ -79,12 +79,12 @@ fun CustomLazyColumnFavoriteItem(list : List<FavoriteRecipesModel>, favoriteReci
             SwipeableActionsBox(endActions = listOf(archive), backgroundUntilSwipeThreshold = Color.Green, swipeThreshold = 200.dp) {
                 ListItem(
                     modifier = Modifier
-                        .border(2.dp, color = Color.Green, shape = RoundedCornerShape(15.dp))
+                        .border(2.dp, color = Color.Red, shape = RoundedCornerShape(15.dp))
                         .background(backgroundMode),
                     text = { Text(text = item.title, fontSize = MaterialTheme.typography.h6.fontSize) },
                     secondaryText = {
                         Column() {
-                            item.nutrients.forEach {
+                            item.nutrients?.forEach {
                                 Column() {
                                     Row() {
                                         Text(text = it.name + " ")

@@ -35,11 +35,6 @@ class FavoriteRecipesViewModel(application: Application) : AndroidViewModel(appl
         }
     }
 
-    fun deleteAllFromFavoriteRecipes(){
-        viewModelScope.launch(Dispatchers.IO){
-            repository.deleteAllFromRecipes()
-        }
-    }
 
     class FavoriteViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

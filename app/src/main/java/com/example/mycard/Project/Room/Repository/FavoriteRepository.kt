@@ -15,7 +15,4 @@ class FavoriteRepository(private val dao : FavoriteRecipesDAO) {
         dao.deleteFromFavoriteRecipes(recipesModel)
     }
 
-    suspend fun deleteAllFromRecipes(){
-        dao.deleteAllFromFavoriteRecipes()
-    }
 }
