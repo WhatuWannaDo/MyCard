@@ -1,9 +1,6 @@
 package com.example.mycard.Project.MVVM.View.Screens
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.mycard.Project.MVVM.Models.CardModel
 import com.example.mycard.Project.MVVM.Models.FavoriteRecipesModel
 import com.example.mycard.Project.MVVM.ViewModels.FavoriteRecipesViewModel
@@ -71,7 +69,7 @@ fun CustomLazyColumnFavoriteItem(list : List<FavoriteRecipesModel>, favoriteReci
 
             val archive = SwipeAction(
                 onSwipe = {
-                    favoriteRecipesViewModel.deleteFromFavoriteRecipes(FavoriteRecipesModel(item.id, "", emptyList()))
+                    favoriteRecipesViewModel.deleteFromFavoriteRecipes(FavoriteRecipesModel(item.id, title = "", image = "", nutrients = emptyList()))
                 },
                 icon = {Icon(imageVector = Icons.Default.Delete, contentDescription = "DeleteOnSwipe", modifier = Modifier.padding(16.dp), tint = Color.White)},
                 background = Color.Red,
@@ -93,6 +91,15 @@ fun CustomLazyColumnFavoriteItem(list : List<FavoriteRecipesModel>, favoriteReci
                                     }
                                 }
                             }
+                        }
+                    },
+                    icon = {
+                        Column() {
+                            Image(
+                                painter = rememberAsyncImagePainter(item.image),
+                                contentDescription = null,
+                                modifier = Modifier.size(128.dp)
+                            )
                         }
                     }
                 )

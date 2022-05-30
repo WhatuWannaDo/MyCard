@@ -110,7 +110,7 @@ fun CustomLazyColumnRecipesItem(viewModel: CardViewModel, obj : MainActivity, fa
                             }
                         },
                         trailing = { Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = "AddToFavoriteRecipes", modifier = Modifier.clickable {
-                            favoriteRecipesViewModel.insertIntoFavoriteRecipes(FavoriteRecipesModel(0, item.title, item.nutrition?.nutrients as? List<NutrientsFavoriteModel>))
+                            favoriteRecipesViewModel.insertIntoFavoriteRecipes(FavoriteRecipesModel(0, item.title, item.image, item.nutrition?.nutrients as? List<NutrientsFavoriteModel>))
                         })},
                         icon = {
                             Column() {

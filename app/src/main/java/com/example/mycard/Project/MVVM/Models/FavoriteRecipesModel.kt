@@ -8,6 +8,7 @@ data class FavoriteRecipesModel(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val title: String,
+    val image : String,
     val nutrients: List<NutrientsFavoriteModel>?
 )
 
