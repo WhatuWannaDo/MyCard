@@ -14,12 +14,13 @@ import com.example.mycard.Project.MVVM.View.*
 import com.example.mycard.Project.MVVM.View.Screens.DETAIL_OBJECT_VAlUE
 import com.example.mycard.Project.MVVM.View.Screens.Screens
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
+import com.example.mycard.Project.MVVM.ViewModels.FavoriteRecipesViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
 @ExperimentalMaterialApi
 @Composable
-fun SetupNavGraph(navHostController: NavHostController, cardViewModel: CardViewModel, obj : MainActivity) {
+fun SetupNavGraph(navHostController: NavHostController, cardViewModel: CardViewModel, obj : MainActivity, favoriteRecipesViewModel: FavoriteRecipesViewModel) {
     NavHost(navController = navHostController, startDestination = getDest(obj = obj)
     ){
         composable(route = Screens.Home.route, content = {
@@ -38,7 +39,7 @@ fun SetupNavGraph(navHostController: NavHostController, cardViewModel: CardViewM
             type = NavType.StringType
         }), content = {
             val argument = it.arguments?.getString(DETAIL_OBJECT_VAlUE).toString()
-            RecipesSearchScreen(navHostController, argument, cardViewModel, obj)
+            RecipesSearchScreen(navHostController, argument, cardViewModel, obj, favoriteRecipesViewModel)
         })
         composable(route = Screens.RecipesSearchValues.route, content = {
             RecipesValuesScreen(navHostController, cardViewModel, obj)

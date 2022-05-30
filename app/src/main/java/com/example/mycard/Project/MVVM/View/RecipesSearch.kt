@@ -12,6 +12,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
@@ -23,24 +25,28 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import com.example.mycard.MainActivity
+import com.example.mycard.Project.MVVM.Models.FavoriteRecipesModel
+import com.example.mycard.Project.MVVM.Models.NutrientsFavoriteModel
 import com.example.mycard.Project.MVVM.View.Screens.Screens
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
+import com.example.mycard.Project.MVVM.ViewModels.FavoriteRecipesViewModel
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
+import java.util.ArrayList
 
 @ExperimentalMaterialApi
 @Composable
-fun RecipesSearchScreen(navController: NavController, responseObject : String, viewModel: CardViewModel, obj : MainActivity){
+fun RecipesSearchScreen(navController: NavController, responseObject : String, viewModel: CardViewModel, obj : MainActivity, favoriteRecipesViewModel: FavoriteRecipesViewModel){
     //decode received url and call the method which will call this url to api again
     val urlDecodedObject = URLDecoder.decode(responseObject, StandardCharsets.UTF_8.toString())
     viewModel.getByURL(urlDecodedObject)
-    Scaffold(topBar = { TopAppBarRecipes(navController = navController, viewModel) }) {
-        CustomLazyColumnRecipesItem(viewModel = viewModel, obj = obj)
+    Scaffold(topBar = { TopAppBarRecipes(navController = navController) }) {
+        CustomLazyColumnRecipesItem(viewModel = viewModel, obj = obj, favoriteRecipesViewModel)
     }
 }
 
 @Composable
-fun TopAppBarRecipes(navController: NavController, viewModel: CardViewModel){
+fun TopAppBarRecipes(navController: NavController){
     val buttonMode : Color
     val iconMode = Color.White
     if (isSystemInDarkTheme()){
@@ -51,9 +57,16 @@ fun TopAppBarRecipes(navController: NavController, viewModel: CardViewModel){
     TopAppBar(modifier = Modifier.fillMaxWidth()) {
         Text(text = "Recipes", fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.h5.fontSize)
         Spacer(Modifier.weight(1f, true))
-        Icon(imageVector = Icons.Default.Search, contentDescription = "Search Recipes", tint = iconMode, modifier = Modifier.clickable {
+        Button(onClick = {
             navController.navigate(Screens.RecipesSearchValues.route)
-        })
+        }, colors = ButtonDefaults.buttonColors(backgroundColor = buttonMode)) {
+            Icon(imageVector = Icons.Default.Search, contentDescription = "Search Recipes", tint = iconMode)
+        }
+        Button(onClick = {
+
+        }, colors = ButtonDefaults.buttonColors(backgroundColor = buttonMode)) {
+            Icon(imageVector = Icons.Default.Favorite, contentDescription = "SettingsRecipes", tint = iconMode)
+        }
         Button(onClick = { navController.navigate(route = Screens.Settings.route) }, colors = ButtonDefaults.buttonColors(backgroundColor = buttonMode)) {
             Icon(imageVector = Icons.Default.Settings, contentDescription = "SettingsRecipes", tint = iconMode)
         }
@@ -64,7 +77,7 @@ fun TopAppBarRecipes(navController: NavController, viewModel: CardViewModel){
 @SuppressLint("CommitPrefEdits", "UnrememberedMutableState")
 @ExperimentalMaterialApi
 @Composable
-fun CustomLazyColumnRecipesItem(viewModel: CardViewModel, obj : MainActivity) {
+fun CustomLazyColumnRecipesItem(viewModel: CardViewModel, obj : MainActivity, favoriteRecipesViewModel: FavoriteRecipesViewModel) {
     val recompositionState = mutableStateOf(0) //increased automatically for recomposition (should be removed and changed for smth else!!!)
 
     val backgroundMode : Color
@@ -95,7 +108,10 @@ fun CustomLazyColumnRecipesItem(viewModel: CardViewModel, obj : MainActivity) {
                                     }
                                 }
                             }
-                        }
+                        },
+                        trailing = { Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = "AddToFavoriteRecipes", modifier = Modifier.clickable {
+                            favoriteRecipesViewModel.insertIntoFavoriteRecipes(FavoriteRecipesModel(0, it.title, it.nutrition?.nutrients as List<NutrientsFavoriteModel>))
+                        })}
                     )
                 }
             }else{

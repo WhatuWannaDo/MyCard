@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.mycard.Project.MVVM.View.NavGraph.SetupNavGraph
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
+import com.example.mycard.Project.MVVM.ViewModels.FavoriteRecipesViewModel
 import com.example.mycard.ui.theme.MyCardTheme
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -22,12 +23,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val viewModel = ViewModelProvider(this).get(CardViewModel::class.java)
+        val favoriteViewModel = ViewModelProvider(this).get(FavoriteRecipesViewModel::class.java)
         setContent {
             MyCardTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     navController = rememberNavController()
-                    SetupNavGraph(navHostController = navController, viewModel, this)
+                    SetupNavGraph(navHostController = navController, viewModel, this, favoriteViewModel)
                 }
             }
         }

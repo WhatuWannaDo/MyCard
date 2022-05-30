@@ -107,7 +107,7 @@ fun ProgressBarCircular(progressState : MutableState<Boolean>, delayInMillis : L
         Column(
             Modifier
                 .fillMaxSize()
-                .padding(vertical = 20.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Bottom) {
+                .padding(vertical = 60.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Bottom) {
             CircularProgressIndicator()
             GlobalScope.launch(Dispatchers.Default) {
                 delay(delayInMillis)
