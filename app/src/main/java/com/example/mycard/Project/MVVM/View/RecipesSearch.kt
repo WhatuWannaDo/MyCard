@@ -63,7 +63,7 @@ fun TopAppBarRecipes(navController: NavController){
             Icon(imageVector = Icons.Default.Search, contentDescription = "Search Recipes", tint = iconMode)
         }
         Button(onClick = {
-
+            navController.navigate(Screens.FavoriteRecipes.route)
         }, colors = ButtonDefaults.buttonColors(backgroundColor = buttonMode)) {
             Icon(imageVector = Icons.Default.Favorite, contentDescription = "SettingsRecipes", tint = iconMode)
         }

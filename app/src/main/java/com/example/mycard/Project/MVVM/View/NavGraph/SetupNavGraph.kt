@@ -12,6 +12,7 @@ import androidx.navigation.navArgument
 import com.example.mycard.MainActivity
 import com.example.mycard.Project.MVVM.View.*
 import com.example.mycard.Project.MVVM.View.Screens.DETAIL_OBJECT_VAlUE
+import com.example.mycard.Project.MVVM.View.Screens.FavoriteScreen
 import com.example.mycard.Project.MVVM.View.Screens.Screens
 import com.example.mycard.Project.MVVM.ViewModels.CardViewModel
 import com.example.mycard.Project.MVVM.ViewModels.FavoriteRecipesViewModel
@@ -43,6 +44,9 @@ fun SetupNavGraph(navHostController: NavHostController, cardViewModel: CardViewM
         })
         composable(route = Screens.RecipesSearchValues.route, content = {
             RecipesValuesScreen(navHostController, cardViewModel, obj)
+        })
+        composable(route = Screens.FavoriteRecipes.route, content = {
+            FavoriteScreen(navHostController, favoriteRecipesViewModel)
         })
     }
 }

@@ -14,4 +14,5 @@ sealed class Screens(val route : String){
         }
     }
     object RecipesSearchValues : Screens(route = "recipes_search_values")
+    object FavoriteRecipes : Screens(route = "favorite_recipes_route")
 }
