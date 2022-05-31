@@ -410,7 +410,7 @@ would be added soon
                             (if(maxFat.isEmpty()) null else maxFat),
                             (if(minSugar.isEmpty()) null else minSugar),
                             (if(maxSugar.isEmpty()) null else maxSugar),
-                            "5"
+                            "10"
                         )
 
                         viewModel.recipesResponse.observe(obj, Observer {
