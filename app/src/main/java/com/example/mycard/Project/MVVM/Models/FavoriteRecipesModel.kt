@@ -9,6 +9,7 @@ data class FavoriteRecipesModel(
     val id: Int,
     val title: String,
     val image : String,
+    val recipeUrl : String,
     val nutrients: List<NutrientsFavoriteModel>?
 )
 

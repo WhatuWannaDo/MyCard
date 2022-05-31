@@ -77,8 +77,7 @@ fun EditTexts(viewModel: CardViewModel, obj : MainActivity, navController: NavCo
     var includeIngredients : String by remember { mutableStateOf("") }
     var excludeIngredients : String by remember { mutableStateOf("") }
     var type : String by remember { mutableStateOf("") }
-    var instructionsRequired : Boolean by remember { mutableStateOf(false) }
-    var addRecipeInformation : Boolean = true
+    val addRecipeInformation : Boolean = true
     var titleMatch : String by remember { mutableStateOf("") }
     var maxReadyTime : String by remember { mutableStateOf("") }
     var minCarbs : String by remember { mutableStateOf("") }
@@ -396,7 +395,6 @@ would be added soon
                             (if(includeIngredients.isEmpty()) null else includeIngredients),
                             (if(excludeIngredients.isEmpty()) null else excludeIngredients),
                             (if(type.isEmpty()) null else type),
-                            //instructionsRequired,
                             addRecipeInformation,
                             (if(titleMatch.isEmpty()) null else titleMatch),
                             (if(maxReadyTime.isEmpty()) null else maxReadyTime),

@@ -1,5 +1,7 @@
 package com.example.mycard.Project.MVVM.View.Screens
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.mycard.MainActivity
 import com.example.mycard.Project.MVVM.Models.CardModel
 import com.example.mycard.Project.MVVM.Models.FavoriteRecipesModel
 import com.example.mycard.Project.MVVM.ViewModels.FavoriteRecipesViewModel
@@ -25,11 +28,11 @@ import me.saket.swipe.SwipeableActionsBox
 
 @ExperimentalMaterialApi
 @Composable
-fun FavoriteScreen(navController: NavController, favoriteRecipesViewModel: FavoriteRecipesViewModel){
+fun FavoriteScreen(navController: NavController, favoriteRecipesViewModel: FavoriteRecipesViewModel, obj: MainActivity){
     val getAllRecipesVM = favoriteRecipesViewModel.getAllRecipes.collectAsState(initial = listOf()).value
 
     Scaffold(topBar = { TopAppBarFavoriteRecipes(navController = navController)}) {
-        CustomLazyColumnFavoriteItem(list = getAllRecipesVM, favoriteRecipesViewModel = favoriteRecipesViewModel)
+        CustomLazyColumnFavoriteItem(list = getAllRecipesVM, favoriteRecipesViewModel = favoriteRecipesViewModel, obj = obj)
     }
 }
 
@@ -54,7 +57,7 @@ fun TopAppBarFavoriteRecipes(navController: NavController){
 
 @ExperimentalMaterialApi
 @Composable
-fun CustomLazyColumnFavoriteItem(list : List<FavoriteRecipesModel>, favoriteRecipesViewModel: FavoriteRecipesViewModel){
+fun CustomLazyColumnFavoriteItem(list : List<FavoriteRecipesModel>, favoriteRecipesViewModel: FavoriteRecipesViewModel, obj : MainActivity){
 
     val backgroundMode : Color
     if (isSystemInDarkTheme()){
@@ -69,7 +72,7 @@ fun CustomLazyColumnFavoriteItem(list : List<FavoriteRecipesModel>, favoriteReci
 
             val archive = SwipeAction(
                 onSwipe = {
-                    favoriteRecipesViewModel.deleteFromFavoriteRecipes(FavoriteRecipesModel(item.id, title = "", image = "", nutrients = emptyList()))
+                    favoriteRecipesViewModel.deleteFromFavoriteRecipes(FavoriteRecipesModel(item.id, title = "", image = "", recipeUrl = "" ,nutrients = emptyList()))
                 },
                 icon = {Icon(imageVector = Icons.Default.Delete, contentDescription = "DeleteOnSwipe", modifier = Modifier.padding(16.dp), tint = Color.White)},
                 background = Color.Red,
@@ -100,6 +103,9 @@ fun CustomLazyColumnFavoriteItem(list : List<FavoriteRecipesModel>, favoriteReci
                                 contentDescription = null,
                                 modifier = Modifier.size(128.dp)
                             )
+                            Text(text = "More info...", color = Color(61, 91, 141), modifier = Modifier.clickable {
+                                obj.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(item.recipeUrl)))
+                            })
                         }
                     }
                 )

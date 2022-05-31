@@ -12,7 +12,7 @@ import com.example.mycard.Project.MVVM.util.TypeConverterRecipes
 import com.example.mycard.Project.Room.Data.DAO.CardDAO
 import com.example.mycard.Project.Room.Data.DAO.FavoriteRecipesDAO
 
-@Database(entities = [CardModel::class, FavoriteRecipesModel::class], exportSchema = false, version = 8)
+@Database(entities = [CardModel::class, FavoriteRecipesModel::class], exportSchema = false, version = 9)
 @TypeConverters(TypeConverterRecipes::class)
 abstract class DataBase : RoomDatabase() {
     abstract fun cardDao() : CardDAO

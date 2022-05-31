@@ -46,7 +46,7 @@ fun SetupNavGraph(navHostController: NavHostController, cardViewModel: CardViewM
             RecipesValuesScreen(navHostController, cardViewModel, obj)
         })
         composable(route = Screens.FavoriteRecipes.route, content = {
-            FavoriteScreen(navHostController, favoriteRecipesViewModel)
+            FavoriteScreen(navHostController, favoriteRecipesViewModel, obj)
         })
     }
 }
