@@ -1,6 +1,5 @@
 package com.example.mycard.Project.MVVM.Models
 
-import com.google.gson.annotations.SerializedName
 
 data class RecipesModel(
     val results : List<ResultInfo>
@@ -14,40 +13,7 @@ data class ResultInfo(
     val offset : Int,
     val number : Int,
     val totalResults : Int,
-    val analyzedInstructionsRecipe : AnalyzedInstructionsStep
-)
-data class AnalyzedInstructionsStep(
-    val name : String,
-    val steps : List<AnalyzeStepsRecipes>
-)
-
-data class AnalyzeStepsRecipes(
-    @SerializedName("number")
-    val stepNumber : Int,
-    @SerializedName("step")
-    val stepTitle : String,
-    val ingredients : List<IngredientsRecipe>,
-    @SerializedName("equipment")
-    val equipmentSteps : List<EquipmentRecipe>
-)
-data class EquipmentRecipe(
-    @SerializedName("id")
-    val idIngredients : Int,
-    @SerializedName("name")
-    val nameIngredient : String,
-    val localizedName : String,
-    @SerializedName("image")
-    val imageIngredient : String
-)
-
-data class IngredientsRecipe(
-    @SerializedName("id")
-    val idIngredients : Int,
-    @SerializedName("name")
-    val nameIngredient : String,
-    val localizedName : String,
-    @SerializedName("image")
-    val imageIngredient : String
+    val sourceUrl : String
 )
 
 data class Nutrients(

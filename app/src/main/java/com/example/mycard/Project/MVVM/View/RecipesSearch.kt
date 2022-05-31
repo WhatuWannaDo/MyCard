@@ -1,6 +1,8 @@
 package com.example.mycard.Project.MVVM.View
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.*
@@ -119,7 +121,9 @@ fun CustomLazyColumnRecipesItem(viewModel: CardViewModel, obj : MainActivity, fa
                                     contentDescription = null,
                                     modifier = Modifier.size(128.dp)
                                 )
-                                Text(text = "More info...", color = Color(61, 91, 141))
+                                Text(text = "More info...", color = Color(61, 91, 141), modifier = Modifier.clickable {
+                                    obj.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(item.sourceUrl)))
+                                })
                             }
                         }
                     )
