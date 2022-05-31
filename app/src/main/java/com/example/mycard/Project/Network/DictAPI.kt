@@ -46,7 +46,7 @@ interface DictAPI {
         @Query("excludeIngredients") excludeIngredients : String?, // A comma-separated list of ingredients or ingredient types that the recipes must not contain.
         @Query("type") type : String?, // https://spoonacular.com/food-api/docs#Meal-Types
         //would be added soon @Query("instructionsRequired") instructionsRequired : Boolean, // Whether the recipes must have instructions.
-        //would be added soon @Query("addRecipeInformation") addRecipeInformation : Boolean, // If set to true, you get more information about the recipes returned.
+        @Query("addRecipeInformation") addRecipeInformation : Boolean, // If set to true, you get more information about the recipes returned.
         @Query("titleMatch") titleMatch : String?, // Enter text that must be found in the title of the recipes.
         @Query("maxReadyTime") maxReadyTime : String?, // The maximum time in minutes it should take to prepare and cook the recipe.
         @Query("minCarbs") minCarbs : String?, // "10"	The minimum amount of carbohydrates in grams the recipe must have.
