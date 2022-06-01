@@ -29,6 +29,7 @@ import com.example.mycard.Project.ui.screens.Screens
 @Composable
 fun MenuItemSearchScreen(navController: NavController, viewModel: CardViewModel, obj: MainActivity){
     var searchState : String by remember { mutableStateOf("") }
+    val noDataState = mutableStateOf(true)
 
     Scaffold(topBar = { TopAppBarMenu(navController = navController) }) {
         Column() {
@@ -44,7 +45,9 @@ fun MenuItemSearchScreen(navController: NavController, viewModel: CardViewModel,
                 label = {Text("Search")},
                 singleLine = true
             )
-            CustomLazyColumnMenuItem(viewModel, obj)
+            CustomLazyColumnMenuItem(viewModel, obj, noDataState)
+            NoDataText(noDataState = noDataState)
+
         }
     }
 
@@ -72,7 +75,7 @@ fun TopAppBarMenu(navController: NavController){
 @SuppressLint("CommitPrefEdits", "UnrememberedMutableState")
 @ExperimentalMaterialApi
 @Composable
-fun CustomLazyColumnMenuItem(viewModel: CardViewModel, obj : MainActivity) {
+fun CustomLazyColumnMenuItem(viewModel: CardViewModel, obj : MainActivity, noDataState : MutableState<Boolean>) {
     val backgroundMode : Color
     if (isSystemInDarkTheme()){
         backgroundMode = Color(20,20,20)
@@ -83,6 +86,11 @@ fun CustomLazyColumnMenuItem(viewModel: CardViewModel, obj : MainActivity) {
     LazyColumn(contentPadding = PaddingValues(vertical = 20.dp, horizontal = 5.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         viewModel.menuItemsResponse.observe(obj, Observer {response ->
             val result = response.body()?.menuItems?.size
+
+            if (result != 0){
+                noDataState.value = false
+            }
+
             if(response.isSuccessful) {
                 result?.let {
                     items(response.body()?.menuItems!!){

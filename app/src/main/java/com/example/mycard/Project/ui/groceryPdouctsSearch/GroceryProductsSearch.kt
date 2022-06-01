@@ -24,10 +24,14 @@ import com.example.mycard.Project.ui.viewModels.CardViewModel
 import com.example.mycard.Project.data.network.API_KEY
 import com.example.mycard.Project.ui.screens.Screens
 
+@SuppressLint("UnrememberedMutableState")
 @ExperimentalMaterialApi
 @Composable
 fun GroceryProductsSearchScreen(navController: NavController, viewModel: CardViewModel, obj: MainActivity){
     var searchState : String by remember { mutableStateOf("") }
+
+    val noDataState = mutableStateOf(true)
+
     Scaffold(topBar = { TopAppBarGrocery(navController = navController) }) {
         Column() {
             OutlinedTextField(
@@ -42,7 +46,8 @@ fun GroceryProductsSearchScreen(navController: NavController, viewModel: CardVie
                 label = {Text("Search")},
                 singleLine = true
             )
-            CustomLazyColumnGroceryItem(viewModel, obj)
+            CustomLazyColumnGroceryItem(viewModel, obj, noDataState)
+            NoDataText(noDataState = noDataState)
         }
     }
 }
@@ -69,7 +74,7 @@ fun TopAppBarGrocery(navController: NavController){
 @SuppressLint("CommitPrefEdits")
 @ExperimentalMaterialApi
 @Composable
-fun CustomLazyColumnGroceryItem(viewModel: CardViewModel, obj : MainActivity) {
+fun CustomLazyColumnGroceryItem(viewModel: CardViewModel, obj : MainActivity, noDataState : MutableState<Boolean>) {
     val backgroundMode : Color
     val strokeMode : Color
     if (isSystemInDarkTheme()){
@@ -82,6 +87,9 @@ fun CustomLazyColumnGroceryItem(viewModel: CardViewModel, obj : MainActivity) {
     LazyColumn(contentPadding = PaddingValues(vertical = 10.dp, horizontal = 5.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         viewModel.groceryResponse.observe(obj, Observer {response ->
             val result = response.body()?.products?.size
+            if (result != 0){
+                noDataState.value = false
+            }
             if(response.isSuccessful) {
                 result?.let {
                     items(response.body()?.products!!){

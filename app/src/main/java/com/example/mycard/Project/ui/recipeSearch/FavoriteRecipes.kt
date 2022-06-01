@@ -1,5 +1,6 @@
 package com.example.mycard.Project.MVVM.View.Screens
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.*
@@ -12,7 +13,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -21,18 +24,22 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.mycard.Project.ui.MainActivity
 import com.example.mycard.Project.MVVM.Models.FavoriteRecipesModel
+import com.example.mycard.Project.MVVM.View.NoDataText
 import com.example.mycard.Project.ui.screens.Screens
 import com.example.mycard.Project.ui.viewModels.FavoriteRecipesViewModel
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
 
+@SuppressLint("UnrememberedMutableState")
 @ExperimentalMaterialApi
 @Composable
 fun FavoriteScreen(navController: NavController, favoriteRecipesViewModel: FavoriteRecipesViewModel, obj: MainActivity){
     val getAllRecipesVM = favoriteRecipesViewModel.getAllRecipes.collectAsState(initial = listOf()).value
+    val noDataState = mutableStateOf(true)
 
     Scaffold(topBar = { TopAppBarFavoriteRecipes(navController = navController)}) {
-        CustomLazyColumnFavoriteItem(list = getAllRecipesVM, favoriteRecipesViewModel = favoriteRecipesViewModel, obj = obj)
+        CustomLazyColumnFavoriteItem(list = getAllRecipesVM, favoriteRecipesViewModel = favoriteRecipesViewModel, obj = obj, noDataState)
+        NoDataText(noDataState = noDataState)
     }
 }
 
@@ -57,13 +64,16 @@ fun TopAppBarFavoriteRecipes(navController: NavController){
 
 @ExperimentalMaterialApi
 @Composable
-fun CustomLazyColumnFavoriteItem(list : List<FavoriteRecipesModel>, favoriteRecipesViewModel: FavoriteRecipesViewModel, obj : MainActivity){
+fun CustomLazyColumnFavoriteItem(list : List<FavoriteRecipesModel>, favoriteRecipesViewModel: FavoriteRecipesViewModel, obj : MainActivity, noDataState : MutableState<Boolean>){
 
     val backgroundMode : Color
     if (isSystemInDarkTheme()){
         backgroundMode = Color(20,20,20)
     }else{
         backgroundMode = Color.White
+    }
+    if(list.isNotEmpty()){
+        noDataState.value = false
     }
 
     LazyColumn(contentPadding = PaddingValues(vertical = 10.dp, horizontal = 5.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {

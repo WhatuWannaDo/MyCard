@@ -16,7 +16,9 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -33,14 +35,18 @@ import com.example.mycard.Project.ui.viewModels.FavoriteRecipesViewModel
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
+@SuppressLint("UnrememberedMutableState")
 @ExperimentalMaterialApi
 @Composable
 fun RecipesSearchScreen(navController: NavController, responseObject : String, viewModel: CardViewModel, obj : MainActivity, favoriteRecipesViewModel: FavoriteRecipesViewModel){
     //decode received url and call the method which will call this url to api again
     val urlDecodedObject = URLDecoder.decode(responseObject, StandardCharsets.UTF_8.toString())
     viewModel.getByURL(urlDecodedObject)
+
+    val noDataState = mutableStateOf(true)
     Scaffold(topBar = { TopAppBarRecipes(navController = navController) }) {
-        CustomLazyColumnRecipesItem(viewModel = viewModel, obj = obj, favoriteRecipesViewModel)
+        CustomLazyColumnRecipesItem(viewModel = viewModel, obj = obj, favoriteRecipesViewModel, noDataState)
+        NoDataText(noDataState = noDataState)
     }
 }
 
@@ -76,7 +82,7 @@ fun TopAppBarRecipes(navController: NavController){
 @SuppressLint("CommitPrefEdits", "UnrememberedMutableState")
 @ExperimentalMaterialApi
 @Composable
-fun CustomLazyColumnRecipesItem(viewModel: CardViewModel, obj : MainActivity, favoriteRecipesViewModel: FavoriteRecipesViewModel) {
+fun CustomLazyColumnRecipesItem(viewModel: CardViewModel, obj : MainActivity, favoriteRecipesViewModel: FavoriteRecipesViewModel, noDataState : MutableState<Boolean>) {
     val recompositionState = mutableStateOf(0) //increased automatically for recomposition (should be removed and changed for smth else!!!)
 
     val backgroundMode : Color
@@ -89,6 +95,11 @@ fun CustomLazyColumnRecipesItem(viewModel: CardViewModel, obj : MainActivity, fa
         viewModel.urlResponse.observe(obj, Observer {response ->
             recompositionState.value += 1
             if(response.isSuccessful) {
+
+                if (response.body()?.results?.size != 0){
+                    noDataState.value = false
+                }
+
                 items(response.body()?.results!!){item ->
                     ListItem(
                         modifier = Modifier
@@ -136,5 +147,14 @@ fun CustomLazyColumnRecipesItem(viewModel: CardViewModel, obj : MainActivity, fa
                 }
             }
         })
+    }
+}
+
+@Composable
+fun NoDataText(noDataState : MutableState<Boolean>){
+    if (noDataState.value){
+        Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize()) {
+            Text(text = "No data here.", fontSize = MaterialTheme.typography.h6.fontSize)
+        }
     }
 }

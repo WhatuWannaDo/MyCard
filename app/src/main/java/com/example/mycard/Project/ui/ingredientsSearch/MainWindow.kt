@@ -48,6 +48,8 @@ fun MainWindow(cardViewModel: CardViewModel, obj : MainActivity, navController: 
     val openDialogAddNewProduct = remember { mutableStateOf(false) }
     val alertDialogDescription = remember { mutableStateOf(false) }
     val api = API_KEY
+    val noDataState = mutableStateOf(true)
+
 
     val sharedPrefs : SharedPreferences = obj.getSharedPreferences("descr", MODE_PRIVATE)
 
@@ -62,7 +64,9 @@ fun MainWindow(cardViewModel: CardViewModel, obj : MainActivity, navController: 
             navController = navController)
         AlertDialogDescription(alertDialogDescription = alertDialogDescription, sharedPreferences = sharedPrefs)}
     ){
-        CustomLazyColumnItem(list = getAllProductsVM, alertDialogDescription = alertDialogDescription, sharedPreferences = sharedPrefs, viewModel = cardViewModel)
+        CustomLazyColumnItem(list = getAllProductsVM, alertDialogDescription = alertDialogDescription, sharedPreferences = sharedPrefs, viewModel = cardViewModel, noDataState)
+        NoDataText(noDataState = noDataState)
+
     }
 }
 
@@ -122,7 +126,13 @@ fun TopAppBarCard(
 @SuppressLint("CommitPrefEdits")
 @ExperimentalMaterialApi
 @Composable
-fun CustomLazyColumnItem(list : List<CardModel>, alertDialogDescription : MutableState<Boolean>, sharedPreferences: SharedPreferences, viewModel: CardViewModel) {
+fun CustomLazyColumnItem(
+    list : List<CardModel>,
+    alertDialogDescription : MutableState<Boolean>,
+    sharedPreferences: SharedPreferences,
+    viewModel: CardViewModel,
+    noDataState : MutableState<Boolean>
+) {
     val editor = sharedPreferences.edit()
     val backgroundMode : Color
     if (isSystemInDarkTheme()){
@@ -131,6 +141,11 @@ fun CustomLazyColumnItem(list : List<CardModel>, alertDialogDescription : Mutabl
         backgroundMode = Color.White
     }
     LazyColumn(contentPadding = PaddingValues(vertical = 10.dp, horizontal = 5.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+
+        if(list.isNotEmpty()){
+            noDataState.value = false
+        }
+
         items(list) { product ->
             //swipe to delete
 
