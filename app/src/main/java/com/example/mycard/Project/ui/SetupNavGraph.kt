@@ -42,7 +42,7 @@ fun SetupNavGraph(navHostController: NavHostController, cardViewModel: CardViewM
             type = NavType.StringType
         }), content = {
             val argument = it.arguments?.getString(DETAIL_OBJECT_VAlUE).toString()
-            RecipesSearchScreen(navHostController, argument, cardViewModel, obj, favoriteRecipesViewModel)
+            RecipesSearchScreen(navHostController, argument, cardViewModel, obj, favoriteRecipesViewModel, cardViewModel)
         })
         composable(route = Screens.RecipesSearchValues.route, content = {
             RecipesValuesScreen(navHostController, cardViewModel, obj)

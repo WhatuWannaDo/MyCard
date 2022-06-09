@@ -29,6 +29,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.mycard.Project.ui.MainActivity
 import com.example.mycard.Project.MVVM.Models.FavoriteRecipesModel
 import com.example.mycard.Project.MVVM.Models.NutrientsFavoriteModel
+import com.example.mycard.Project.data.models.databaseModels.CardModel
 import com.example.mycard.Project.ui.screens.Screens
 import com.example.mycard.Project.ui.viewModels.CardViewModel
 import com.example.mycard.Project.ui.viewModels.FavoriteRecipesViewModel
@@ -38,14 +39,21 @@ import java.nio.charset.StandardCharsets
 @SuppressLint("UnrememberedMutableState")
 @ExperimentalMaterialApi
 @Composable
-fun RecipesSearchScreen(navController: NavController, responseObject : String, viewModel: CardViewModel, obj : MainActivity, favoriteRecipesViewModel: FavoriteRecipesViewModel){
+fun RecipesSearchScreen(
+    navController: NavController,
+    responseObject : String,
+    viewModel: CardViewModel,
+    obj : MainActivity,
+    favoriteRecipesViewModel: FavoriteRecipesViewModel,
+    cardViewModel: CardViewModel
+){
     //decode received url and call the method which will call this url to api again
     val urlDecodedObject = URLDecoder.decode(responseObject, StandardCharsets.UTF_8.toString())
     viewModel.getByURL(urlDecodedObject)
 
     val noDataState = mutableStateOf(true)
     Scaffold(topBar = { TopAppBarRecipes(navController = navController) }) {
-        CustomLazyColumnRecipesItem(viewModel = viewModel, obj = obj, favoriteRecipesViewModel, noDataState)
+        CustomLazyColumnRecipesItem(viewModel = viewModel, obj = obj, favoriteRecipesViewModel, noDataState, cardViewModel)
         NoDataText(noDataState = noDataState)
     }
 }
@@ -82,7 +90,13 @@ fun TopAppBarRecipes(navController: NavController){
 @SuppressLint("CommitPrefEdits", "UnrememberedMutableState")
 @ExperimentalMaterialApi
 @Composable
-fun CustomLazyColumnRecipesItem(viewModel: CardViewModel, obj : MainActivity, favoriteRecipesViewModel: FavoriteRecipesViewModel, noDataState : MutableState<Boolean>) {
+fun CustomLazyColumnRecipesItem(
+    viewModel: CardViewModel,
+    obj : MainActivity,
+    favoriteRecipesViewModel: FavoriteRecipesViewModel,
+    noDataState : MutableState<Boolean>,
+    cardViewModel: CardViewModel
+) {
     val recompositionState = mutableStateOf(0) //increased automatically for recomposition (should be removed and changed for smth else!!!)
 
     val backgroundMode : Color
@@ -105,7 +119,25 @@ fun CustomLazyColumnRecipesItem(viewModel: CardViewModel, obj : MainActivity, fa
                         modifier = Modifier
                             .border(2.dp, color = Color.Red, shape = RoundedCornerShape(15.dp))
                             .background(backgroundMode),
-                        text = { Text(text = item.title, fontSize = MaterialTheme.typography.h6.fontSize) },
+                        text = {
+                            Column(modifier = Modifier.fillMaxSize()) {
+                                Text(text = item.title, fontSize = MaterialTheme.typography.h6.fontSize)
+                                Box(contentAlignment = Alignment.BottomEnd){
+                                    Button(onClick = {
+                                        item.analyzedInstructions.forEach { instr ->
+                                            instr.steps.forEach { steps ->
+                                                steps.ingredients.forEach { analyzedIngredients ->
+                                                    cardViewModel.addProduct(CardModel(0, analyzedIngredients.name, "1", ""))
+                                                }
+                                            }
+
+                                        }
+                                    }) {
+                                        Text(text = "Get ingredients")
+                                    }
+                                }
+                            }
+                               },
                         secondaryText = {
                             Column() {
                                 item.nutrition?.nutrients?.forEach { nutrition ->
