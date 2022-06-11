@@ -69,7 +69,16 @@ fun MainWindow(cardViewModel: CardViewModel, obj : MainActivity, navController: 
             navController = navController)
         AlertDialogDescription(alertDialogDescription = alertDialogDescription, sharedPreferences = sharedPrefs)}
     ){
-        CustomLazyColumnItem(list = getAllProductsVM, getAllFoldersVM, alertDialogDescription = alertDialogDescription, sharedPreferences = sharedPrefs, viewModel = cardViewModel, folderViewModel, noDataState, navController)
+        CustomLazyColumnItem(
+            list = getAllProductsVM,
+            folderList = getAllFoldersVM,
+            alertDialogDescription = alertDialogDescription,
+            sharedPreferences = sharedPrefs,
+            viewModel = cardViewModel,
+            folderViewModel = folderViewModel,
+            noDataState = noDataState,
+            navController = navController,
+        )
         NoDataText(noDataState = noDataState)
 
     }

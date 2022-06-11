@@ -145,9 +145,9 @@ fun CustomLazyColumnRecipesItem(
 
                                         }
                                         GlobalScope.launch(Dispatchers.IO) {
-
                                             folderViewModel.addFolder(FolderModel(0, item.title, Gson().toJson(listOfRecipes)))
                                         }
+                                        Toast.makeText(obj, "Ingredients added to ${item.title} folder into Ingredients tab", Toast.LENGTH_SHORT).show()
                                     }) {
                                         Text(text = "Get ingredients")
                                     }
