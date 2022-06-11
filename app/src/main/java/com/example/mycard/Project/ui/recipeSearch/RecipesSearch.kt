@@ -35,6 +35,7 @@ import com.example.mycard.Project.ui.screens.Screens
 import com.example.mycard.Project.ui.viewModels.CardViewModel
 import com.example.mycard.Project.ui.viewModels.FavoriteRecipesViewModel
 import com.example.mycard.Project.ui.viewModels.FolderViewModel
+import com.google.gson.Gson
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -42,6 +43,7 @@ import kotlinx.coroutines.launch
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
+@DelicateCoroutinesApi
 @SuppressLint("UnrememberedMutableState")
 @ExperimentalMaterialApi
 @Composable
@@ -143,7 +145,8 @@ fun CustomLazyColumnRecipesItem(
 
                                         }
                                         GlobalScope.launch(Dispatchers.IO) {
-                                            folderViewModel.addFolder(FolderModel(0, item.title, listOfRecipes))
+
+                                            folderViewModel.addFolder(FolderModel(0, item.title, Gson().toJson(listOfRecipes)))
                                         }
                                     }) {
                                         Text(text = "Get ingredients")

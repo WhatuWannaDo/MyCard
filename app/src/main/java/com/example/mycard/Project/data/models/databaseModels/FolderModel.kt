@@ -8,5 +8,5 @@ data class FolderModel(
     @PrimaryKey(autoGenerate = true)
     val id : Int,
     val name : String,
-    val data : List<CardModel>?
+    val data : String
 )

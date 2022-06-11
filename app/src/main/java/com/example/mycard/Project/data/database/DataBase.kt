@@ -11,7 +11,7 @@ import com.example.mycard.Project.MVVM.util.TypeConverterFolder
 import com.example.mycard.Project.MVVM.util.TypeConverterRecipes
 import com.example.mycard.Project.data.models.databaseModels.FolderModel
 
-@Database(entities = [CardModel::class, FavoriteRecipesModel::class, FolderModel::class], exportSchema = false, version = 11)
+@Database(entities = [CardModel::class, FavoriteRecipesModel::class, FolderModel::class], exportSchema = false, version = 12)
 @TypeConverters(TypeConverterRecipes::class, TypeConverterFolder::class)
 abstract class DataBase : RoomDatabase() {
     abstract fun cardDao() : CardDAO

@@ -12,7 +12,9 @@ import androidx.navigation.navArgument
 import com.example.mycard.Project.ui.MainActivity
 import com.example.mycard.Project.MVVM.View.*
 import com.example.mycard.Project.MVVM.View.Screens.FavoriteScreen
+import com.example.mycard.Project.ui.ingredientsSearch.FolderIngredients
 import com.example.mycard.Project.ui.screens.DETAIL_OBJECT_VAlUE
+import com.example.mycard.Project.ui.screens.FOLDER_INGREDIENTS_VALUE
 import com.example.mycard.Project.ui.screens.Screens
 import com.example.mycard.Project.ui.viewModels.CardViewModel
 import com.example.mycard.Project.ui.viewModels.FavoriteRecipesViewModel
@@ -50,6 +52,14 @@ fun SetupNavGraph(navHostController: NavHostController, cardViewModel: CardViewM
         })
         composable(route = Screens.FavoriteRecipes.route, content = {
             FavoriteScreen(navHostController, favoriteRecipesViewModel, obj)
+        })
+        composable(route = Screens.FolderIngredients.route, arguments = listOf(navArgument(
+            FOLDER_INGREDIENTS_VALUE
+        ){
+            type = NavType.StringType
+        }), content = {
+            val argument = it.arguments?.getString(FOLDER_INGREDIENTS_VALUE).toString()
+            FolderIngredients(navHostController, argument)
         })
     }
 }

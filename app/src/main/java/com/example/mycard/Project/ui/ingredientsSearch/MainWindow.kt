@@ -69,7 +69,7 @@ fun MainWindow(cardViewModel: CardViewModel, obj : MainActivity, navController: 
             navController = navController)
         AlertDialogDescription(alertDialogDescription = alertDialogDescription, sharedPreferences = sharedPrefs)}
     ){
-        CustomLazyColumnItem(list = getAllProductsVM, getAllFoldersVM, alertDialogDescription = alertDialogDescription, sharedPreferences = sharedPrefs, viewModel = cardViewModel, noDataState)
+        CustomLazyColumnItem(list = getAllProductsVM, getAllFoldersVM, alertDialogDescription = alertDialogDescription, sharedPreferences = sharedPrefs, viewModel = cardViewModel, folderViewModel, noDataState, navController)
         NoDataText(noDataState = noDataState)
 
     }
@@ -129,6 +129,7 @@ fun TopAppBarCard(
 
 }
 
+@DelicateCoroutinesApi
 @SuppressLint("CommitPrefEdits")
 @ExperimentalMaterialApi
 @Composable
@@ -138,7 +139,9 @@ fun CustomLazyColumnItem(
     alertDialogDescription : MutableState<Boolean>,
     sharedPreferences: SharedPreferences,
     viewModel: CardViewModel,
-    noDataState : MutableState<Boolean>
+    folderViewModel: FolderViewModel,
+    noDataState : MutableState<Boolean>,
+    navController: NavController
 ) {
     val editor = sharedPreferences.edit()
     val backgroundMode : Color
@@ -181,16 +184,32 @@ fun CustomLazyColumnItem(
         }
 
         items(folderList){ folder ->
-            ListItem(
-                modifier = Modifier
-                    .border(2.dp, color = Color.Green, shape = RoundedCornerShape(15.dp))
-                    .background(backgroundMode)
-                    .clickable {
-
-                    },
-                icon = ({ Icon(imageVector = Icons.Default.List, contentDescription = "folder") }),
-                text = { Text(text = folder.name)}
+            val deleteFolder = SwipeAction(
+                onSwipe = {
+                    GlobalScope.launch(Dispatchers.IO) {
+                        folderViewModel.deleteFolder(FolderModel(folder.id, "", ""))
+                    }
+                },
+                icon = {Icon(imageVector = Icons.Default.Delete, contentDescription = "DeleteOnSwipe", modifier = Modifier.padding(16.dp), tint = Color.White)},
+                background = Color.Red,
             )
+            SwipeableActionsBox(endActions = listOf(deleteFolder), backgroundUntilSwipeThreshold = Color.Green, swipeThreshold = 200.dp) {
+                ListItem(
+                    modifier = Modifier
+                        .border(2.dp, color = Color.Green, shape = RoundedCornerShape(15.dp))
+                        .background(backgroundMode)
+                        .clickable {
+                            navController.navigate(Screens.FolderIngredients.passIngredients(folder.data.toString()))
+                        },
+                    icon = ({
+                        Icon(
+                            imageVector = Icons.Default.List,
+                            contentDescription = "folder"
+                        )
+                    }),
+                    text = { Text(text = folder.name) }
+                )
+            }
         }
     }
 }
@@ -234,7 +253,7 @@ fun AlertDialogDescription(alertDialogDescription: MutableState<Boolean>, shared
 @Composable
 fun DeleteAllDialog(
     deleteDialog : MutableState<Boolean>,
-    cardViewModel: CardViewModel
+    cardViewModel: CardViewModel,
 ){
     val openDialog = remember { mutableStateOf(true) }
 
@@ -243,7 +262,7 @@ fun DeleteAllDialog(
             deleteDialog.value = false
         },
         title = {
-            Text(text = "Delete all?", fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.h5.fontSize)
+            Text(text = "Delete all instead of folders?", fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.h5.fontSize)
         },
         buttons = {
             Row(
