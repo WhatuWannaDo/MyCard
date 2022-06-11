@@ -7,12 +7,14 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.mycard.Project.MVVM.View.NavGraph.SetupNavGraph
 import com.example.mycard.Project.ui.viewModels.CardViewModel
 import com.example.mycard.Project.ui.viewModels.FavoriteRecipesViewModel
 import com.example.mycard.Project.ui.theme.MyCardTheme
+import com.example.mycard.Project.ui.viewModels.FolderViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 
@@ -24,12 +26,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val viewModel = ViewModelProvider(this).get(CardViewModel::class.java)
         val favoriteViewModel = ViewModelProvider(this).get(FavoriteRecipesViewModel::class.java)
+        val folderViewModel = ViewModelProvider(this).get(FolderViewModel::class.java)
         setContent {
             MyCardTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     navController = rememberNavController()
-                    SetupNavGraph(navHostController = navController, viewModel, this, favoriteViewModel)
+                    SetupNavGraph(navHostController = navController, viewModel, this, favoriteViewModel, folderViewModel)
                 }
             }
         }

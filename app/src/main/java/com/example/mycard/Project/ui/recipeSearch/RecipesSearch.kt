@@ -30,9 +30,15 @@ import com.example.mycard.Project.ui.MainActivity
 import com.example.mycard.Project.MVVM.Models.FavoriteRecipesModel
 import com.example.mycard.Project.MVVM.Models.NutrientsFavoriteModel
 import com.example.mycard.Project.data.models.databaseModels.CardModel
+import com.example.mycard.Project.data.models.databaseModels.FolderModel
 import com.example.mycard.Project.ui.screens.Screens
 import com.example.mycard.Project.ui.viewModels.CardViewModel
 import com.example.mycard.Project.ui.viewModels.FavoriteRecipesViewModel
+import com.example.mycard.Project.ui.viewModels.FolderViewModel
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
@@ -45,7 +51,8 @@ fun RecipesSearchScreen(
     viewModel: CardViewModel,
     obj : MainActivity,
     favoriteRecipesViewModel: FavoriteRecipesViewModel,
-    cardViewModel: CardViewModel
+    cardViewModel: CardViewModel,
+    folderViewModel: FolderViewModel
 ){
     //decode received url and call the method which will call this url to api again
     val urlDecodedObject = URLDecoder.decode(responseObject, StandardCharsets.UTF_8.toString())
@@ -53,7 +60,7 @@ fun RecipesSearchScreen(
 
     val noDataState = mutableStateOf(true)
     Scaffold(topBar = { TopAppBarRecipes(navController = navController) }) {
-        CustomLazyColumnRecipesItem(viewModel = viewModel, obj = obj, favoriteRecipesViewModel, noDataState, cardViewModel)
+        CustomLazyColumnRecipesItem(viewModel = viewModel, obj = obj, favoriteRecipesViewModel, noDataState, cardViewModel, folderViewModel)
         NoDataText(noDataState = noDataState)
     }
 }
@@ -87,6 +94,7 @@ fun TopAppBarRecipes(navController: NavController){
 
 }
 
+@DelicateCoroutinesApi
 @SuppressLint("CommitPrefEdits", "UnrememberedMutableState")
 @ExperimentalMaterialApi
 @Composable
@@ -95,7 +103,8 @@ fun CustomLazyColumnRecipesItem(
     obj : MainActivity,
     favoriteRecipesViewModel: FavoriteRecipesViewModel,
     noDataState : MutableState<Boolean>,
-    cardViewModel: CardViewModel
+    cardViewModel: CardViewModel,
+    folderViewModel: FolderViewModel
 ) {
     val recompositionState = mutableStateOf(0) //increased automatically for recomposition (should be removed and changed for smth else!!!)
 
@@ -124,13 +133,17 @@ fun CustomLazyColumnRecipesItem(
                                 Text(text = item.title, fontSize = MaterialTheme.typography.h6.fontSize)
                                 Box(contentAlignment = Alignment.BottomEnd){
                                     Button(onClick = {
+                                        val listOfRecipes = ArrayList<CardModel>()
                                         item.analyzedInstructions.forEach { instr ->
                                             instr.steps.forEach { steps ->
                                                 steps.ingredients.forEach { analyzedIngredients ->
-                                                    cardViewModel.addProduct(CardModel(0, analyzedIngredients.name, "1", ""))
+                                                    listOfRecipes.add(CardModel(0, analyzedIngredients.name, "1", ""))
                                                 }
                                             }
 
+                                        }
+                                        GlobalScope.launch(Dispatchers.IO) {
+                                            folderViewModel.addFolder(FolderModel(0, item.title, listOfRecipes))
                                         }
                                     }) {
                                         Text(text = "Get ingredients")

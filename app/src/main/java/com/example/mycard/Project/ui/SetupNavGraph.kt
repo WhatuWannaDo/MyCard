@@ -16,16 +16,17 @@ import com.example.mycard.Project.ui.screens.DETAIL_OBJECT_VAlUE
 import com.example.mycard.Project.ui.screens.Screens
 import com.example.mycard.Project.ui.viewModels.CardViewModel
 import com.example.mycard.Project.ui.viewModels.FavoriteRecipesViewModel
+import com.example.mycard.Project.ui.viewModels.FolderViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
 @ExperimentalMaterialApi
 @Composable
-fun SetupNavGraph(navHostController: NavHostController, cardViewModel: CardViewModel, obj : MainActivity, favoriteRecipesViewModel: FavoriteRecipesViewModel) {
+fun SetupNavGraph(navHostController: NavHostController, cardViewModel: CardViewModel, obj : MainActivity, favoriteRecipesViewModel: FavoriteRecipesViewModel, folderViewModel: FolderViewModel) {
     NavHost(navController = navHostController, startDestination = getDest(obj = obj)
     ){
         composable(route = Screens.Home.route, content = {
-            MainWindow(cardViewModel = cardViewModel, obj = obj, navHostController)
+            MainWindow(cardViewModel = cardViewModel, obj = obj, navHostController, folderViewModel)
         })
         composable(route = Screens.Settings.route, content = {
             SettingsTab(navHostController, obj = obj)
@@ -42,7 +43,7 @@ fun SetupNavGraph(navHostController: NavHostController, cardViewModel: CardViewM
             type = NavType.StringType
         }), content = {
             val argument = it.arguments?.getString(DETAIL_OBJECT_VAlUE).toString()
-            RecipesSearchScreen(navHostController, argument, cardViewModel, obj, favoriteRecipesViewModel, cardViewModel)
+            RecipesSearchScreen(navHostController, argument, cardViewModel, obj, favoriteRecipesViewModel, cardViewModel, folderViewModel)
         })
         composable(route = Screens.RecipesSearchValues.route, content = {
             RecipesValuesScreen(navHostController, cardViewModel, obj)

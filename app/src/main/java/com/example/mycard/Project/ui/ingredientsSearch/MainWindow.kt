@@ -29,9 +29,11 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import com.example.mycard.Project.ui.MainActivity
 import com.example.mycard.Project.data.models.databaseModels.CardModel
+import com.example.mycard.Project.data.models.databaseModels.FolderModel
 import com.example.mycard.Project.ui.viewModels.CardViewModel
 import com.example.mycard.Project.data.network.API_KEY
 import com.example.mycard.Project.ui.screens.Screens
+import com.example.mycard.Project.ui.viewModels.FolderViewModel
 import kotlinx.coroutines.*
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
@@ -41,8 +43,10 @@ import me.saket.swipe.SwipeableActionsBox
 
 @ExperimentalMaterialApi
 @Composable
-fun MainWindow(cardViewModel: CardViewModel, obj : MainActivity, navController: NavController){
+fun MainWindow(cardViewModel: CardViewModel, obj : MainActivity, navController: NavController, folderViewModel: FolderViewModel){
     val getAllProductsVM = cardViewModel.getAllProducts.collectAsState(initial = listOf()).value
+    val getAllFoldersVM = folderViewModel.getAllFolders.collectAsState(initial = listOf()).value
+
     val showDialog = mutableStateOf(false)
     val deleteDialog = mutableStateOf(false)
     val openDialogAddNewProduct = remember { mutableStateOf(false) }
@@ -59,12 +63,13 @@ fun MainWindow(cardViewModel: CardViewModel, obj : MainActivity, navController: 
             deleteDialog = deleteDialog,
             obj = obj,
             productList = getAllProductsVM,
+            folderList = getAllFoldersVM,
             openDialogAddNewProduct = openDialogAddNewProduct,
             api = api,
             navController = navController)
         AlertDialogDescription(alertDialogDescription = alertDialogDescription, sharedPreferences = sharedPrefs)}
     ){
-        CustomLazyColumnItem(list = getAllProductsVM, alertDialogDescription = alertDialogDescription, sharedPreferences = sharedPrefs, viewModel = cardViewModel, noDataState)
+        CustomLazyColumnItem(list = getAllProductsVM, getAllFoldersVM, alertDialogDescription = alertDialogDescription, sharedPreferences = sharedPrefs, viewModel = cardViewModel, noDataState)
         NoDataText(noDataState = noDataState)
 
     }
@@ -78,6 +83,7 @@ fun TopAppBarCard(
     deleteDialog: MutableState<Boolean>,
     obj: MainActivity,
     productList : List<CardModel>,
+    folderList: List<FolderModel>,
     openDialogAddNewProduct : MutableState<Boolean>,
     api : String,
     navController: NavController
@@ -112,7 +118,7 @@ fun TopAppBarCard(
             AddNewProduct(cardViewModel = cardViewModel, showDialog = showDialog, obj = obj, openDialogAddNewProduct = openDialogAddNewProduct, api = api)
         }
         if(deleteDialog.value) {
-            if(productList.isNotEmpty()){
+            if((productList.isNotEmpty()) && (folderList.isNotEmpty())){
                 DeleteAllDialog(deleteDialog = deleteDialog, cardViewModel = cardViewModel)
             }else{
                 Toast.makeText(obj, "No data here", Toast.LENGTH_SHORT).show()
@@ -128,6 +134,7 @@ fun TopAppBarCard(
 @Composable
 fun CustomLazyColumnItem(
     list : List<CardModel>,
+    folderList : List<FolderModel>,
     alertDialogDescription : MutableState<Boolean>,
     sharedPreferences: SharedPreferences,
     viewModel: CardViewModel,
@@ -142,7 +149,7 @@ fun CustomLazyColumnItem(
     }
     LazyColumn(contentPadding = PaddingValues(vertical = 10.dp, horizontal = 5.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
 
-        if(list.isNotEmpty()){
+        if((list.isNotEmpty()) || (folderList.isNotEmpty())){
             noDataState.value = false
         }
 
@@ -171,6 +178,19 @@ fun CustomLazyColumnItem(
                     trailing = { Text(text = "Amount: " + product.productAmount, fontSize = MaterialTheme.typography.h6.fontSize) },
                 )
             }
+        }
+
+        items(folderList){ folder ->
+            ListItem(
+                modifier = Modifier
+                    .border(2.dp, color = Color.Green, shape = RoundedCornerShape(15.dp))
+                    .background(backgroundMode)
+                    .clickable {
+
+                    },
+                icon = ({ Icon(imageVector = Icons.Default.List, contentDescription = "folder") }),
+                text = { Text(text = folder.name)}
+            )
         }
     }
 }
