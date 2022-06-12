@@ -94,8 +94,16 @@ fun ColumnSettings(sharedPrefs : SharedPreferences, progressState : MutableState
     Column(
         Modifier
             .fillMaxSize()
-            .padding(vertical = 220.dp, horizontal = 10.dp)) {
-        Text(text = "After select any category, \nwait until progress will finish", color = Color.DarkGray)
+            .padding(horizontal = 10.dp),
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(text = "After select any category, \nwait until progress will finish\n", color = Color.DarkGray)
+        Text(text =
+                "Recipes for searching recipes with parameters.\n\n" +
+                "Ingredients for searching and added them to list.\n\n" +
+                "Grocery for search ingredients by name (Example: garlic - Garlic Beagles, 20 Oz).\n\n" +
+                "Menu Items for search any available dish from restaurant."
+        )
     }
 }
 @DelicateCoroutinesApi
