@@ -98,6 +98,7 @@ fun ColumnSettings(sharedPrefs : SharedPreferences, progressState : MutableState
         verticalArrangement = Arrangement.Center
     ) {
         Text(text = "After select any category, \nwait until progress will finish\n", color = Color.DarkGray)
+        Text(text = "App theme selected automatically with system theme\n", color = Color.DarkGray)
         Text(text =
                 "Recipes for searching recipes with parameters.\n\n" +
                 "Ingredients for searching and added them to list.\n\n" +
