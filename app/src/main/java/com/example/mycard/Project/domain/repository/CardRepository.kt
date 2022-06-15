@@ -1,39 +1,45 @@
 package com.example.mycard.Project.domain.repository
 
 import com.example.mycard.Project.MVVM.Models.*
-import com.example.mycard.Project.data.network.DictApiObject
 import com.example.mycard.Project.data.database.CardDAO
 import com.example.mycard.Project.data.models.databaseModels.CardModel
+import com.example.mycard.Project.data.network.DictAPI
+import com.example.mycard.Project.data.repository.CardRepositoryInt
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class CardRepository(private val cardDAO: CardDAO) {
-    val getAllProducts : Flow<List<CardModel>> = cardDAO.getAllProducts()
+@Singleton
+class CardRepository @Inject constructor(private val cardDAO: CardDAO, private val dictAPI: DictAPI) :
+    CardRepositoryInt {
 
-    suspend fun addProduct(cardModel: CardModel){
-        cardDAO.addProduct(cardModel = cardModel)
+    override val getAllProducts : Flow<List<CardModel>> = cardDAO.getAllProducts()
+
+    override suspend fun addProduct(cardModel: CardModel){
+        return cardDAO.addProduct(cardModel = cardModel)
     }
 
-    suspend fun deleteProduct(cardModel: CardModel){
-        cardDAO.deleteProduct(cardModel = cardModel)
+    override suspend fun deleteProduct(cardModel: CardModel){
+        return cardDAO.deleteProduct(cardModel = cardModel)
     }
 
-    suspend fun deleteAllProducts(){
-        cardDAO.deleteAllProducts()
+    override suspend fun deleteAllProducts(){
+        return cardDAO.deleteAllProducts()
     }
-    suspend fun getTextFromApi(apiKey : String, text : String, value:String) : Response<List<HeadModel>> {
-        return DictApiObject.api.getTextFromDictApi(apiKey, text, value)
-    }
-
-    suspend fun getGroceryFromApi(apiKey : String, text : String, value:String) : Response<GroceryModel>{
-        return DictApiObject.api.getGroceryFromApi(apiKey, text, value)
+    override suspend fun getTextFromApi(apiKey : String, text : String, value:String) : Response<List<HeadModel>> {
+        return dictAPI.getTextFromDictApi(apiKey, text, value)
     }
 
-    suspend fun getMenuItemsFromApi(apiKey : String, text : String, value:String) : Response<MenuItemsModel>{
-        return DictApiObject.api.getMenuItemsApi(apiKey, text, value)
+    override suspend fun getGroceryFromApi(apiKey : String, text : String, value:String) : Response<GroceryModel>{
+        return dictAPI.getGroceryFromApi(apiKey, text, value)
     }
 
-    suspend fun getRecipesFromApi(
+    override suspend fun getMenuItemsFromApi(apiKey : String, text : String, value:String) : Response<MenuItemsModel>{
+        return dictAPI.getMenuItemsApi(apiKey, text, value)
+    }
+
+    override suspend fun getRecipesFromApi(
         apiKey : String,
         text : String,
         cuisine : String?,
@@ -58,7 +64,7 @@ class CardRepository(private val cardDAO: CardDAO) {
         maxSugar : String?,
         value : String
         ) : Response<RecipesModel>{
-        return DictApiObject.api.getRecipesApi(
+        return dictAPI.getRecipesApi(
             apiKey,
             text,
             cuisine,
@@ -85,7 +91,7 @@ class CardRepository(private val cardDAO: CardDAO) {
         )
     }
 
-    suspend fun getByURL(url: String) : Response<RecipesModel>{
-        return DictApiObject.api.getByURL(url)
+    override suspend fun getByURL(url: String) : Response<RecipesModel>{
+        return dictAPI.getByURL(url)
     }
 }

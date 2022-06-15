@@ -8,11 +8,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.mycard.Project.MVVM.Models.FavoriteRecipesModel
 import com.example.mycard.Project.data.database.DataBase
 import com.example.mycard.Project.domain.repository.FavoriteRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class FavoriteRecipesViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class FavoriteRecipesViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
 
     val getAllRecipes : Flow<List<FavoriteRecipesModel>>
     private val repository : FavoriteRepository

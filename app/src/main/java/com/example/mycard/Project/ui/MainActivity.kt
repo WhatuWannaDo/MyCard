@@ -15,9 +15,10 @@ import com.example.mycard.Project.ui.viewModels.CardViewModel
 import com.example.mycard.Project.ui.viewModels.FavoriteRecipesViewModel
 import com.example.mycard.Project.ui.theme.MyCardTheme
 import com.example.mycard.Project.ui.viewModels.FolderViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.DelicateCoroutinesApi
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     lateinit var navController : NavHostController
     @DelicateCoroutinesApi

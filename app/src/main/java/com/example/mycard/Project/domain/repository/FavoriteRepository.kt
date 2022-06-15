@@ -2,16 +2,20 @@ package com.example.mycard.Project.domain.repository
 
 import com.example.mycard.Project.MVVM.Models.FavoriteRecipesModel
 import com.example.mycard.Project.data.database.FavoriteRecipesDAO
+import com.example.mycard.Project.data.repository.FavoriteRepositoryInt
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class FavoriteRepository(private val dao : FavoriteRecipesDAO) {
-    val getAllRecipes : Flow<List<FavoriteRecipesModel>> = dao.getAllFromFavoriteRecipes()
+@Singleton
+class FavoriteRepository @Inject constructor(private val dao : FavoriteRecipesDAO) : FavoriteRepositoryInt{
+    override val getAllRecipes : Flow<List<FavoriteRecipesModel>> = dao.getAllFromFavoriteRecipes()
 
-    suspend fun insertIntoRecipes(recipesModel: FavoriteRecipesModel){
+    override suspend fun insertIntoRecipes(recipesModel: FavoriteRecipesModel){
         dao.insertIntoFavoriteRecipes(recipesModel)
     }
 
-    suspend fun deleteFromRecipes(recipesModel: FavoriteRecipesModel){
+    override suspend fun deleteFromRecipes(recipesModel: FavoriteRecipesModel){
         dao.deleteFromFavoriteRecipes(recipesModel)
     }
 

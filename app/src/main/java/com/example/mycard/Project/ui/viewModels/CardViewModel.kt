@@ -4,14 +4,19 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.example.mycard.Project.MVVM.Models.*
 import com.example.mycard.Project.data.database.DataBase
+import com.example.mycard.Project.data.di.DictApiObject
 import com.example.mycard.Project.domain.repository.CardRepository
 import com.example.mycard.Project.data.models.databaseModels.CardModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import retrofit2.Retrofit
+import javax.inject.Inject
 
-class CardViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class CardViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
 
     val getAllProducts : Flow<List<CardModel>>
     private val cardRepository : CardRepository
@@ -25,7 +30,8 @@ class CardViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         val cardDAO = DataBase.getDatabase(application).cardDao()
-        cardRepository = CardRepository(cardDAO = cardDAO)
+        val dictAPI = DictApiObject.provideDictApi(DictApiObject.provideRetrofit())
+        cardRepository = CardRepository(cardDAO = cardDAO, dictAPI)
         getAllProducts = cardRepository.getAllProducts
     }
 
